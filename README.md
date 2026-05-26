@@ -417,8 +417,8 @@ Make every unprotected referenced model explicit with `authorize: ["*"]`, and ad
 Run the unit tests from the repository root:
 
 ```bash
-uv --project integration_tests run dbt deps --project-dir unit_tests --profiles-dir unit_tests
-uv --project integration_tests run dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+uv run dbt deps --project-dir unit_tests --profiles-dir unit_tests
+uv run dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
 ```
 
 The unit-test project follows dbt's package unit-testing pattern: each package macro has focused tests under `unit_tests/macros/unit_tests`, and `run_unit_tests` executes them with `dbt run-operation`.
@@ -426,8 +426,8 @@ The unit-test project follows dbt's package unit-testing pattern: each package m
 Run the integration project compile check:
 
 ```bash
-uv --project integration_tests run dbt deps --project-dir integration_tests --profiles-dir integration_tests
-uv --project integration_tests run dbt compile --project-dir integration_tests --profiles-dir integration_tests
+uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
+uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```
 
 Check dbt Fusion compatibility:

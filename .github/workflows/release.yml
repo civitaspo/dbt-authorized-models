@@ -31,22 +31,22 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          cache-dependency-glob: integration_tests/uv.lock
+          cache-dependency-glob: uv.lock
 
       - name: Install Python dependencies
-        run: uv --project integration_tests sync --frozen
+        run: uv sync --frozen
 
       - name: Install unit test packages
-        run: uv --project integration_tests run dbt deps --project-dir unit_tests --profiles-dir unit_tests
+        run: uv run dbt deps --project-dir unit_tests --profiles-dir unit_tests
 
       - name: Run unit tests
-        run: uv --project integration_tests run dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+        run: uv run dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
 
       - name: Install integration test packages
-        run: uv --project integration_tests run dbt deps --project-dir integration_tests --profiles-dir integration_tests
+        run: uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
 
       - name: Compile integration project
-        run: uv --project integration_tests run dbt compile --project-dir integration_tests --profiles-dir integration_tests
+        run: uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 
       - name: Install dbt Fusion
         run: |

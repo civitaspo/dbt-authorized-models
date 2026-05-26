@@ -214,7 +214,7 @@ wheels = [
 ]
 
 [[package]]
-name = "dbt-authorized-models-integration-tests"
+name = "dbt-authorized-models-tests"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
