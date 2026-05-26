@@ -17,6 +17,7 @@ It lets model owners declare which dbt resources may reference a model, using re
 ## Requirements
 
 - dbt Core 1.10 or later.
+- dbt Fusion 2.0 preview is parse-compatible and covered by CI.
 
 ## Installation
 
@@ -204,6 +205,16 @@ cd integration_tests
 uv run dbt deps
 uv run dbt run-operation test_all_macros --profiles-dir .
 uv run dbt compile --profiles-dir .
+```
+
+Check dbt Fusion compatibility:
+
+```bash
+curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --to /tmp/dbt-fusion-bin --update
+/tmp/dbt-fusion-bin/dbt deps --profiles-dir .
+/tmp/dbt-fusion-bin/dbt parse --profiles-dir .
+/tmp/dbt-fusion-bin/dbt run-operation test_all_macros --profiles-dir .
+/tmp/dbt-fusion-bin/dbt compile --profiles-dir .
 ```
 
 ## License
