@@ -1,6 +1,7 @@
 name: dbt_authorized_models
 version: 0.1.0
 config-version: 2
+require-dbt-version: [">=1.10.0", "<2.0.0"]
 
 dispatch:
   - macro_namespace: dbt_authorized_models

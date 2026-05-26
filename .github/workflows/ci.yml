@@ -56,3 +56,38 @@ jobs:
 
       - name: Compile integration project
         run: uv run dbt compile --profiles-dir .
+
+  fusion-compatibility:
+    name: dbt Fusion compatibility
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: integration_tests
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install dbt Fusion
+        run: |
+          mkdir -p "$RUNNER_TEMP/dbt-fusion-bin"
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
+            | sh -s -- --to "$RUNNER_TEMP/dbt-fusion-bin" --update
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" --version
+
+      - name: Install dbt packages
+        run: |
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" deps --profiles-dir .
+
+      - name: Parse integration project
+        run: |
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" parse --profiles-dir .
+
+      - name: Run macro tests
+        run: |
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" run-operation test_all_macros --profiles-dir .
+
+      - name: Compile integration project
+        run: |
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" compile --profiles-dir .
