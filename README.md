@@ -1,5 +1,7 @@
 # dbt-authorized-models
 
+[![CI](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/ci.yml/badge.svg)](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/ci.yml)
+
 `dbt-authorized-models` is a dbt package for enforcing explicit authorization rules on model references.
 
 It lets model owners declare which dbt resources may reference a model, using regular-expression rules over dbt node properties such as `resource_type`, `database`, `schema`, `identifier`, `tags`, and `package_name`.
