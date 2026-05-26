@@ -31,7 +31,17 @@ jobs:
         uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
         with:
           version: "2026.5.15"
+          install_args: "--locked"
           cache: false
 
-      - name: Check workflow security
-        run: mise run ci:workflows
+      - name: Run ghalint
+        run: ghalint run
+
+      - name: Check action pins
+        run: pinact run --check --verify-comment
+
+      - name: Ensure checkout credentials are disabled
+        run: disable-checkout-persist-credentials
+
+      - name: Check workflow formatting
+        run: git diff --exit-code -- .github/workflows

@@ -1,0 +1,17 @@
+[[tools."aqua:suzuki-shunsuke/disable-checkout-persist-credentials"]]
+version = "1.0.0"
+backend = "aqua:suzuki-shunsuke/disable-checkout-persist-credentials"
+"platforms.linux-x64" = { checksum = "sha256:81a4e471cdf0788ad14f648a126d3a8ca82019026262fdfeeea5aaf6490fb89a", url = "https://github.com/suzuki-shunsuke/disable-checkout-persist-credentials/releases/download/v1.0.0/disable-checkout-persist-credentials_linux_amd64.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:48ea9e0aa93febcc4d88095594fe38deb634292f9ed9b187e23067d50c4b4b43", url = "https://github.com/suzuki-shunsuke/disable-checkout-persist-credentials/releases/download/v1.0.0/disable-checkout-persist-credentials_darwin_arm64.tar.gz"}
+
+[[tools."aqua:suzuki-shunsuke/ghalint"]]
+version = "1.5.6"
+backend = "aqua:suzuki-shunsuke/ghalint"
+"platforms.linux-x64" = { checksum = "sha256:98ee0e3330de7286f470d1e89c03ff7ce70d7a5998ba0f15969c400447be579c", url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.6/ghalint_1.5.6_linux_amd64.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:1262cac411e27b4653e6b66b7b06580ebcc2026fdd903e12e6cb0e4591639de6", url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.6/ghalint_1.5.6_darwin_arm64.tar.gz"}
+
+[[tools."aqua:suzuki-shunsuke/pinact"]]
+version = "4.0.0"
+backend = "aqua:suzuki-shunsuke/pinact"
+"platforms.linux-x64" = { checksum = "sha256:cc220902615325b10bd3bc52ed3de27488f79adaec52adcd12bd2194c2d2c592", url = "https://github.com/suzuki-shunsuke/pinact/releases/download/v4.0.0/pinact_linux_amd64.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:3260e0d6fa7d89e4b9a7cc6c120345db9217c4e0571742e9a76db2ba3ff63650", url = "https://github.com/suzuki-shunsuke/pinact/releases/download/v4.0.0/pinact_darwin_arm64.tar.gz"}
