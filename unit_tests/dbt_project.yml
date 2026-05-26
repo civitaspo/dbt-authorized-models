@@ -1,0 +1,5 @@
+name: dbt_authorized_models_unit_tests
+version: 0.1.0
+config-version: 2
+
+profile: unit_tests

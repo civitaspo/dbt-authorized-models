@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   integration-tests:
-    name: Integration tests (Python ${{ matrix.python-version }})
+    name: Tests (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,10 +25,6 @@ jobs:
         python-version:
           - "3.10"
           - "3.13"
-
-    defaults:
-      run:
-        working-directory: integration_tests
 
     steps:
       - name: Check out repository
@@ -46,24 +42,23 @@ jobs:
           cache-dependency-glob: integration_tests/uv.lock
 
       - name: Install Python dependencies
-        run: uv sync --frozen
+        run: uv --project integration_tests sync --frozen
 
-      - name: Install dbt packages
-        run: uv run dbt deps
+      - name: Install unit test packages
+        run: uv --project integration_tests run dbt deps --project-dir unit_tests --profiles-dir unit_tests
 
-      - name: Run macro tests
-        run: uv run dbt run-operation test_all_macros --profiles-dir .
+      - name: Run unit tests
+        run: uv --project integration_tests run dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+
+      - name: Install integration test packages
+        run: uv --project integration_tests run dbt deps --project-dir integration_tests --profiles-dir integration_tests
 
       - name: Compile integration project
-        run: uv run dbt compile --profiles-dir .
+        run: uv --project integration_tests run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 
   fusion-compatibility:
     name: dbt Fusion compatibility
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: integration_tests
 
     steps:
       - name: Check out repository
@@ -76,18 +71,22 @@ jobs:
             | sh -s -- --to "$RUNNER_TEMP/dbt-fusion-bin" --update
           "$RUNNER_TEMP/dbt-fusion-bin/dbt" --version
 
-      - name: Install dbt packages
+      - name: Install unit test packages
         run: |
-          "$RUNNER_TEMP/dbt-fusion-bin/dbt" deps --profiles-dir .
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" deps --project-dir unit_tests --profiles-dir unit_tests
+
+      - name: Run unit tests
+        run: |
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+
+      - name: Install integration test packages
+        run: |
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" deps --project-dir integration_tests --profiles-dir integration_tests
 
       - name: Parse integration project
         run: |
-          "$RUNNER_TEMP/dbt-fusion-bin/dbt" parse --profiles-dir .
-
-      - name: Run macro tests
-        run: |
-          "$RUNNER_TEMP/dbt-fusion-bin/dbt" run-operation test_all_macros --profiles-dir .
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" parse --project-dir integration_tests --profiles-dir integration_tests
 
       - name: Compile integration project
         run: |
-          "$RUNNER_TEMP/dbt-fusion-bin/dbt" compile --profiles-dir .
+          "$RUNNER_TEMP/dbt-fusion-bin/dbt" compile --project-dir integration_tests --profiles-dir integration_tests
