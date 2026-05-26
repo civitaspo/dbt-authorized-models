@@ -20,6 +20,9 @@ jobs:
     permissions:
       contents: read
     timeout-minutes: 10
+    env:
+      SECUREFIX_CLIENT_APP_ID: ${{ vars.SECUREFIX_CLIENT_APP_ID }}
+      SECUREFIX_SERVER_REPOSITORY: ${{ vars.SECUREFIX_SERVER_REPOSITORY }}
 
     steps:
       - name: Check out repository
@@ -34,14 +37,65 @@ jobs:
           install_args: "--locked"
           cache: false
 
+      - name: Fix action pins
+        if: github.event_name == 'pull_request'
+        env:
+          PINACT_GITHUB_TOKEN: ${{ github.token }}
+        run: pinact run --verify-comment
+
+      - name: Check action pins
+        if: github.event_name != 'pull_request'
+        env:
+          PINACT_GITHUB_TOKEN: ${{ github.token }}
+        run: pinact run --check --verify-comment
+
+      - name: Disable checkout credentials
+        if: github.event_name == 'pull_request'
+        run: disable-checkout-persist-credentials
+
+      - name: Ensure checkout credentials are disabled
+        if: github.event_name != 'pull_request'
+        run: |
+          disable-checkout-persist-credentials
+          git diff --exit-code -- .github/workflows
+
       - name: Run ghalint
         run: ghalint run
 
-      - name: Check action pins
-        run: pinact run --check --verify-comment
+      - name: Detect workflow fixes
+        if: github.event_name == 'pull_request'
+        id: workflow-fixes
+        run: |
+          if git diff --quiet -- .github/workflows; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
-      - name: Ensure checkout credentials are disabled
-        run: disable-checkout-persist-credentials
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          git diff --name-only -- .github/workflows
+
+      - name: Request Securefix commit
+        if: |
+          github.event_name == 'pull_request' &&
+          steps.workflow-fixes.outputs.changed == 'true' &&
+          env.SECUREFIX_CLIENT_APP_ID != ''
+        uses: csm-actions/securefix-action@4d885e1bcb71f4f110215c833002ce9fa0ee0fa6 # v0.6.0
+        with:
+          action: client
+          app_id: ${{ env.SECUREFIX_CLIENT_APP_ID }}
+          app_private_key: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
+          commit_message: "ci: apply workflow security fixes"
+          server_repository: ${{ env.SECUREFIX_SERVER_REPOSITORY || github.event.repository.name }}
+
+      - name: Require Securefix configuration
+        if: |
+          github.event_name == 'pull_request' &&
+          steps.workflow-fixes.outputs.changed == 'true' &&
+          env.SECUREFIX_CLIENT_APP_ID == ''
+        run: |
+          echo "Workflow security fixes are needed, but SECUREFIX_CLIENT_APP_ID is not configured." >&2
+          exit 1
 
       - name: Check workflow formatting
+        if: github.event_name != 'pull_request'
         run: git diff --exit-code -- .github/workflows
