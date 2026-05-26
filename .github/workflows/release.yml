@@ -46,7 +46,7 @@ jobs:
         run: uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
 
       - name: Run authorization failure tests
-        run: ./integration_tests/run_authorization_failure_tests.sh uv run dbt
+        run: uv run python integration_tests/run_authorization_failure_tests.py --dbt-command dbt
 
       - name: Compile integration project
         run: uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
@@ -76,7 +76,7 @@ jobs:
 
       - name: Run authorization failure tests with Fusion
         run: |
-          ./integration_tests/run_authorization_failure_tests.sh "$RUNNER_TEMP/dbt-fusion-bin/dbt"
+          python3 integration_tests/run_authorization_failure_tests.py --dbt-command "$RUNNER_TEMP/dbt-fusion-bin/dbt"
 
       - name: Compile integration project with Fusion
         run: |
