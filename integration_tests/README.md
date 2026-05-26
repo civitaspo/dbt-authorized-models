@@ -1,16 +1,10 @@
 # Integration Tests
 
-This dbt project verifies the `dbt-authorized-models` package against DuckDB.
+This dbt project verifies the `dbt-authorized-models` package against DuckDB with fixture models and the authorization hook enabled.
 
-Run the test macros:
-
-```bash
-uv run dbt deps
-uv run dbt run-operation test_all_macros --profiles-dir .
-```
-
-Run a full compile with the authorization hook enabled:
+Run a full compile with the authorization hook enabled from the repository root:
 
 ```bash
-uv run dbt compile --profiles-dir .
+uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
+uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```

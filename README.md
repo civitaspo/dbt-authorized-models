@@ -414,23 +414,31 @@ Make every unprotected referenced model explicit with `authorize: ["*"]`, and ad
 
 ## Development
 
-Run the macro tests from the integration test project:
+Run the unit tests from the repository root:
 
 ```bash
-cd integration_tests
-uv run dbt deps
-uv run dbt run-operation test_all_macros --profiles-dir .
-uv run dbt compile --profiles-dir .
+uv run dbt deps --project-dir unit_tests --profiles-dir unit_tests
+uv run dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+```
+
+The unit-test project follows dbt's package unit-testing pattern: each package macro has focused tests under `unit_tests/macros/unit_tests`, and `run_unit_tests` executes them with `dbt run-operation`.
+
+Run the integration project compile check:
+
+```bash
+uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
+uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```
 
 Check dbt Fusion compatibility:
 
 ```bash
 curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --to /tmp/dbt-fusion-bin --update
-/tmp/dbt-fusion-bin/dbt deps --profiles-dir .
-/tmp/dbt-fusion-bin/dbt parse --profiles-dir .
-/tmp/dbt-fusion-bin/dbt run-operation test_all_macros --profiles-dir .
-/tmp/dbt-fusion-bin/dbt compile --profiles-dir .
+/tmp/dbt-fusion-bin/dbt deps --project-dir unit_tests --profiles-dir unit_tests
+/tmp/dbt-fusion-bin/dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+/tmp/dbt-fusion-bin/dbt deps --project-dir integration_tests --profiles-dir integration_tests
+/tmp/dbt-fusion-bin/dbt parse --project-dir integration_tests --profiles-dir integration_tests
+/tmp/dbt-fusion-bin/dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```
 
 ## License
