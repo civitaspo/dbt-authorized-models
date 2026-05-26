@@ -1,0 +1,8 @@
+integration_tests:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: target/integration_tests.duckdb
+      schema: main
+      threads: 4

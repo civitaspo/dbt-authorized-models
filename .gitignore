@@ -1,7 +1,9 @@
 .DS_Store
 .env
+.user.yml
 .venv/
 dbt_packages/
+package-lock.yml
 logs/
 target/
 *.duckdb
