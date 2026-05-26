@@ -53,6 +53,9 @@ jobs:
       - name: Install integration test packages
         run: uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
 
+      - name: Run authorization failure tests
+        run: uv run python integration_tests/run_authorization_failure_tests.py
+
       - name: Compile integration project
         run: uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 
@@ -63,6 +66,17 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
 
       - name: Install dbt Fusion
         run: |
@@ -86,6 +100,10 @@ jobs:
       - name: Parse integration project
         run: |
           "$RUNNER_TEMP/dbt-fusion-bin/dbt" parse --project-dir integration_tests --profiles-dir integration_tests
+
+      - name: Run authorization failure tests
+        run: |
+          uv run python integration_tests/run_authorization_failure_tests.py --dbt-executable "$RUNNER_TEMP/dbt-fusion-bin/dbt"
 
       - name: Compile integration project
         run: |

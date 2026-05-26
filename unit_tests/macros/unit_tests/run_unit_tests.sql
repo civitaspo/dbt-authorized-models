@@ -2,6 +2,7 @@
   {% do test_regex_match() %}
   {% do test_matches_property() %}
   {% do test_matches_rule() %}
+  {% do test_get_referenced_node() %}
   {% do test_evaluate_authorization() %}
   {% do test_validate_rule_hierarchy() %}
 
