@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import io
 import subprocess
 import sys
+from contextlib import redirect_stderr, redirect_stdout
 from dataclasses import dataclass
 
 
@@ -21,6 +23,13 @@ class Scenario:
     vars: str
     expected_message: str
     expect_success: bool = False
+
+
+@dataclass(frozen=True)
+class Invocation:
+    description: str
+    output: str
+    success: bool
 
 
 SCENARIOS = [
@@ -59,43 +68,79 @@ def parse_args() -> argparse.Namespace:
         description="Run source authorization failure-path integration tests."
     )
     parser.add_argument(
-        "--dbt-command",
-        nargs="+",
-        default=["dbt"],
-        help="Command used to invoke dbt, for example: dbt or /path/to/dbt.",
+        "--dbt-executable",
+        help=(
+            "Path to a dbt CLI executable. Omit this to use dbt Core's "
+            "programmatic dbtRunner API."
+        ),
     )
     return parser.parse_args()
 
 
-def fail(message: str, command: list[str], output: str) -> None:
+def fail(message: str, invocation: Invocation) -> None:
     print(message, file=sys.stderr)
-    print("Command: " + " ".join(command), file=sys.stderr)
-    print(output, file=sys.stderr)
+    print("Invocation: " + invocation.description, file=sys.stderr)
+    print(invocation.output, file=sys.stderr)
     raise SystemExit(1)
 
 
-def run_scenario(dbt_command: list[str], scenario: Scenario) -> None:
-    command = [
-        *dbt_command,
+def invoke_dbt_core(dbt_args: list[str]) -> Invocation:
+    from dbt.cli.main import dbtRunner
+
+    stdout = io.StringIO()
+    stderr = io.StringIO()
+
+    with redirect_stdout(stdout), redirect_stderr(stderr):
+        result = dbtRunner().invoke(dbt_args)
+
+    output = stdout.getvalue() + stderr.getvalue()
+    if result.exception is not None:
+        output += f"\n{type(result.exception).__name__}: {result.exception}\n"
+
+    return Invocation(
+        description="dbtRunner().invoke(" + repr(dbt_args) + ")",
+        output=output,
+        success=result.success,
+    )
+
+
+def invoke_dbt_executable(dbt_executable: str, dbt_args: list[str]) -> Invocation:
+    command = [dbt_executable, *dbt_args]
+    completed = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    return Invocation(
+        description=" ".join(command),
+        output=completed.stdout + completed.stderr,
+        success=completed.returncode == 0,
+    )
+
+
+def invoke_dbt(dbt_args: list[str], dbt_executable: str | None) -> Invocation:
+    if dbt_executable:
+        return invoke_dbt_executable(dbt_executable, dbt_args)
+
+    return invoke_dbt_core(dbt_args)
+
+
+def run_scenario(scenario: Scenario, dbt_executable: str | None) -> None:
+    dbt_args = [
         *BASE_DBT_ARGS,
         "--vars",
         scenario.vars,
     ]
-    completed = subprocess.run(command, capture_output=True, text=True, check=False)
-    output = completed.stdout + completed.stderr
+    invocation = invoke_dbt(dbt_args, dbt_executable)
 
-    if scenario.expect_success and completed.returncode != 0:
-        fail(f"Expected success but command failed: {scenario.name}", command, output)
+    if scenario.expect_success and not invocation.success:
+        fail(f"Expected success but command failed: {scenario.name}", invocation)
 
-    if not scenario.expect_success and completed.returncode == 0:
-        fail(f"Expected failure but command passed: {scenario.name}", command, output)
+    if not scenario.expect_success and invocation.success:
+        fail(f"Expected failure but command passed: {scenario.name}", invocation)
 
-    if scenario.expected_message not in output:
+    if scenario.expected_message not in invocation.output:
         fail(
             f"Expected message was not found for: {scenario.name}\n"
             f"Expected: {scenario.expected_message}",
-            command,
-            output,
+            invocation,
         )
 
     print(f"passed: {scenario.name}")
@@ -104,7 +149,7 @@ def run_scenario(dbt_command: list[str], scenario: Scenario) -> None:
 def main() -> None:
     args = parse_args()
     for scenario in SCENARIOS:
-        run_scenario(args.dbt_command, scenario)
+        run_scenario(scenario, args.dbt_executable)
 
 
 if __name__ == "__main__":
