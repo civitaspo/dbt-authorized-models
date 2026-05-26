@@ -1,0 +1,4 @@
+[tools]
+"aqua:suzuki-shunsuke/disable-checkout-persist-credentials" = "1.0.0"
+"aqua:suzuki-shunsuke/ghalint" = "1.5.6"
+"aqua:suzuki-shunsuke/pinact" = "4.0.0"
