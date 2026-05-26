@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: Customer records used by downstream models.
+    config:
+      meta:
+        authorize:
+          - resource_type: "model"
+            database: ".*"
+            schema: ".*marts"
+          - resource_type: "model"
+            database: ".*"
+            schema: ".*"
+            identifier: ".*"
+            tags: "intermediate"
+
+  - name: customers
+    description: Public customer dimension.
+    config:
+      meta:
+        authorize:
+          - "*"
+
+  - name: customer_pii
+    description: Restricted customer PII.
+    config:
+      meta:
+        authorize:
+          - resource_type: "model"
+            database: ".*"
+            schema: ".*"
+            identifier: ".*"
+            tags: "pii_approved"
+          - resource_type: "model"
+            database: ".*"
+            schema: ".*"
+            identifier: ".*"
+            tags: "admin"
+
+  - name: customer_pii_report
+    description: Authorized report that reads restricted customer PII.
+    config:
+      meta:
+        authorize:
+          - "*"

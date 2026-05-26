@@ -1,0 +1,12 @@
+name: dbt_authorized_models
+version: 0.1.0
+config-version: 2
+
+dispatch:
+  - macro_namespace: dbt_authorized_models
+    search_order:
+      - dbt_authorized_models
+
+models:
+  dbt_authorized_models:
+    +enabled: false

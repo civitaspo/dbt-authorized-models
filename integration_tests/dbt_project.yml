@@ -1,0 +1,25 @@
+name: dbt_authorized_models_integration_tests
+version: 0.1.0
+config-version: 2
+
+profile: integration_tests
+
+on-run-start:
+  - "{{ dbt_authorized_models.check_authorization() }}"
+
+vars:
+  dbt_authorized_models:
+    enforce: true
+    exclude_resource_types: ["test", "analysis"]
+
+models:
+  dbt_authorized_models_integration_tests:
+    staging:
+      +schema: staging
+      +tags: ["staging"]
+    marts:
+      +schema: marts
+      +tags: ["marts"]
+    restricted:
+      +schema: restricted
+      +tags: ["restricted", "pii"]
