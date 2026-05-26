@@ -43,7 +43,7 @@
       {% set ref_nodes = depends_on.get('nodes', []) %}
 
       {% for referenced_id in ref_nodes %}
-        {% set referenced_node = graph.nodes.get(referenced_id) %}
+        {% set referenced_node = dbt_authorized_models.get_referenced_node(referenced_id, graph) %}
 
         {% if referenced_node %}
           {% set ns.total_checks = ns.total_checks + 1 %}
@@ -110,6 +110,21 @@
   {% endif %}
 
   {% do return('') %}
+{% endmacro %}
+
+{#
+  Return a referenced resource from the dbt graph.
+#}
+{% macro get_referenced_node(referenced_id, graph_context) %}
+  {% set graph_nodes = graph_context.nodes if graph_context.nodes is defined and graph_context.nodes is not none else {} %}
+  {% set graph_sources = graph_context.sources if graph_context.sources is defined and graph_context.sources is not none else {} %}
+  {% set referenced_node = graph_nodes.get(referenced_id) %}
+
+  {% if referenced_node is none %}
+    {% set referenced_node = graph_sources.get(referenced_id) %}
+  {% endif %}
+
+  {{ return(referenced_node) }}
 {% endmacro %}
 
 {#

@@ -44,3 +44,26 @@ models:
       meta:
         authorize:
           - "*"
+
+  - name: source_customer_report
+    description: Authorized report that reads a protected source.
+    config:
+      meta:
+        authorize:
+          - "*"
+
+sources:
+  - name: raw
+    description: Protected raw data sources.
+    schema: raw
+    tables:
+      - name: customers
+        identifier: raw_customers
+        description: Raw customer records.
+        config:
+          meta:
+            authorize:
+              - resource_type: "model"
+                database: ".*"
+                schema: ".*marts"
+                identifier: "source_customer_report"
