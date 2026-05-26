@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 10
     env:
       SECUREFIX_CLIENT_APP_ID: ${{ vars.SECUREFIX_CLIENT_APP_ID }}
-      SECUREFIX_SERVER_REPOSITORY: ${{ vars.SECUREFIX_SERVER_REPOSITORY }}
+      SECUREFIX_SERVER_REPOSITORY: ${{ vars.SECUREFIX_SERVER_REPOSITORY || 'securefix-server' }}
 
     steps:
       - name: Check out repository
@@ -85,7 +85,7 @@ jobs:
           app_id: ${{ env.SECUREFIX_CLIENT_APP_ID }}
           app_private_key: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
           commit_message: "ci: apply workflow security fixes"
-          server_repository: ${{ env.SECUREFIX_SERVER_REPOSITORY || github.event.repository.name }}
+          server_repository: ${{ env.SECUREFIX_SERVER_REPOSITORY }}
 
       - name: Require Securefix configuration
         if: |
