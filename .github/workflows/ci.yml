@@ -67,6 +67,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
       - name: Install dbt Fusion
         run: |
           mkdir -p "$RUNNER_TEMP/dbt-fusion-bin"
@@ -92,7 +103,7 @@ jobs:
 
       - name: Run authorization failure tests
         run: |
-          python3 integration_tests/run_authorization_failure_tests.py --dbt-executable "$RUNNER_TEMP/dbt-fusion-bin/dbt"
+          uv run python integration_tests/run_authorization_failure_tests.py --dbt-executable "$RUNNER_TEMP/dbt-fusion-bin/dbt"
 
       - name: Compile integration project
         run: |

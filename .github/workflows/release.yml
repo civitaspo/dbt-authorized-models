@@ -76,7 +76,7 @@ jobs:
 
       - name: Run authorization failure tests with Fusion
         run: |
-          python3 integration_tests/run_authorization_failure_tests.py --dbt-executable "$RUNNER_TEMP/dbt-fusion-bin/dbt"
+          uv run python integration_tests/run_authorization_failure_tests.py --dbt-executable "$RUNNER_TEMP/dbt-fusion-bin/dbt"
 
       - name: Compile integration project with Fusion
         run: |
