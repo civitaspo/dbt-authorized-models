@@ -45,6 +45,9 @@ jobs:
       - name: Install integration test packages
         run: uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
 
+      - name: Run authorization failure tests
+        run: ./integration_tests/run_authorization_failure_tests.sh uv run dbt
+
       - name: Compile integration project
         run: uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 
@@ -70,6 +73,10 @@ jobs:
       - name: Parse integration project with Fusion
         run: |
           "$RUNNER_TEMP/dbt-fusion-bin/dbt" parse --project-dir integration_tests --profiles-dir integration_tests
+
+      - name: Run authorization failure tests with Fusion
+        run: |
+          ./integration_tests/run_authorization_failure_tests.sh "$RUNNER_TEMP/dbt-fusion-bin/dbt"
 
       - name: Compile integration project with Fusion
         run: |

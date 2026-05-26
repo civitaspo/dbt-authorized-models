@@ -67,3 +67,22 @@ sources:
                 database: ".*"
                 schema: ".*marts"
                 identifier: "source_customer_report"
+
+  - name: missing_authorize
+    description: Source fixtures without authorization metadata.
+    schema: raw
+    tables:
+      - name: customers
+        identifier: missing_authorize_customers
+        description: Raw customer records without meta.authorize.
+
+  - name: empty_authorize
+    description: Source fixtures with empty authorization rules.
+    schema: raw
+    tables:
+      - name: customers
+        identifier: empty_authorize_customers
+        description: Raw customer records with empty meta.authorize.
+        config:
+          meta:
+            authorize: []
