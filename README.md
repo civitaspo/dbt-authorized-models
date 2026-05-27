@@ -26,7 +26,7 @@ Add the package to your `packages.yml`:
 ```yaml
 packages:
   - git: "https://github.com/civitaspo/dbt-authorized-models.git"
-    revision: v0.1.0
+    revision: v0.2.0
 ```
 
 Install dependencies:
