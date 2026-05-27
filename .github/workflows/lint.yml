@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 10
     env:
       SECUREFIX_CLIENT_APP_ID: ${{ vars.SECUREFIX_CLIENT_APP_ID }}
-      SECUREFIX_SERVER_REPOSITORY: ${{ vars.SECUREFIX_SERVER_REPOSITORY || 'securefix-server' }}
+      SECUREFIX_SERVER_REPOSITORY: ${{ vars.SECUREFIX_SERVER_REPOSITORY }}
 
     steps:
       - name: Check out repository

@@ -19,9 +19,7 @@ Configure these in each client repository:
 
 - Variable `SECUREFIX_CLIENT_APP_ID`
 - Secret `SECUREFIX_CLIENT_PRIVATE_KEY`
-- Optional variable `SECUREFIX_SERVER_REPOSITORY`
-
-If `SECUREFIX_SERVER_REPOSITORY` is omitted, the client workflow uses `securefix-server`.
+- Variable `SECUREFIX_SERVER_REPOSITORY`, set to `securefix-server`
 
 Configure these in the server repository:
 
