@@ -52,6 +52,20 @@ models:
         authorize:
           - "*"
 
+  - name: source_project_meta_source_report
+    description: Authorized report that reads a source with authorization configured at source level in dbt_project.yml.
+    config:
+      meta:
+        authorize:
+          - "*"
+
+  - name: source_project_meta_table_report
+    description: Authorized report that reads a source table with authorization configured at table level in dbt_project.yml.
+    config:
+      meta:
+        authorize:
+          - "*"
+
 sources:
   - name: raw
     description: Protected raw data sources.
@@ -86,3 +100,19 @@ sources:
         config:
           meta:
             authorize: []
+
+  - name: project_meta_source
+    description: Source fixture whose authorization metadata is configured at source level in dbt_project.yml.
+    schema: raw
+    tables:
+      - name: customers
+        identifier: project_meta_source_customers
+        description: Raw customer records authorized through source-level dbt_project.yml +meta.
+
+  - name: project_meta_table
+    description: Source fixture whose authorization metadata is configured at table level in dbt_project.yml.
+    schema: raw
+    tables:
+      - name: customers
+        identifier: project_meta_table_customers
+        description: Raw customer records authorized through table-level dbt_project.yml +meta.

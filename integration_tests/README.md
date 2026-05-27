@@ -6,5 +6,6 @@ Run a full compile with the authorization hook enabled from the repository root:
 
 ```bash
 uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
+uv run python integration_tests/assert_project_source_meta.py
 uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```

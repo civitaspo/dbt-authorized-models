@@ -23,3 +23,21 @@ models:
     restricted:
       +schema: restricted
       +tags: ["restricted", "pii"]
+
+sources:
+  dbt_authorized_models_integration_tests:
+    project_meta_source:
+      +meta:
+        authorize:
+          - resource_type: "model"
+            database: ".*"
+            schema: ".*marts"
+            identifier: "source_project_meta_source_report"
+    project_meta_table:
+      customers:
+        +meta:
+          authorize:
+            - resource_type: "model"
+              database: ".*"
+              schema: ".*marts"
+              identifier: "source_project_meta_table_report"

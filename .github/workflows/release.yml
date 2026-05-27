@@ -53,6 +53,9 @@ jobs:
       - name: Run authorization failure tests
         run: uv run python integration_tests/run_authorization_failure_tests.py
 
+      - name: Assert dbt_project.yml source metadata
+        run: uv run python integration_tests/assert_project_source_meta.py
+
       - name: Compile integration project
         run: uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 
@@ -82,6 +85,10 @@ jobs:
       - name: Run authorization failure tests with Fusion
         run: |
           uv run python integration_tests/run_authorization_failure_tests.py --dbt-executable "$RUNNER_TEMP/dbt-fusion-bin/dbt"
+
+      - name: Assert dbt_project.yml source metadata with Fusion
+        run: |
+          uv run python integration_tests/assert_project_source_meta.py --dbt-executable "$RUNNER_TEMP/dbt-fusion-bin/dbt"
 
       - name: Compile integration project with Fusion
         run: |
