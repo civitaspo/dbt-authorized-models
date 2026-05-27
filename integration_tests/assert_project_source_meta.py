@@ -16,12 +16,25 @@ MANIFEST_PATH = PROJECT_DIR / "target" / "manifest.json"
 
 
 SOURCE_CASES = {
-    "source.dbt_authorized_models_integration_tests.project_meta_source.customers": (
-        "source_project_meta_source_report"
-    ),
-    "source.dbt_authorized_models_integration_tests.project_meta_table.customers": (
-        "source_project_meta_table_report"
-    ),
+    "source.dbt_authorized_models_integration_tests.project_meta_source.customers": [
+        {
+            "resource_type": "model",
+            "database": ".*",
+            "schema": ".*marts",
+            "identifier": "source_project_meta_source_report",
+        }
+    ],
+    "source.dbt_authorized_models_integration_tests.project_meta_table.customers": [
+        {
+            "resource_type": "model",
+            "database": ".*",
+            "schema": ".*marts",
+            "identifier": "source_project_meta_table_report",
+        }
+    ],
+    "source.dbt_authorized_models_integration_tests.project_meta_source_with_table_meta.customers": [
+        "*"
+    ],
 }
 
 
@@ -110,7 +123,7 @@ def run_parse(dbt_executable: str | None) -> None:
         raise SystemExit(1)
 
 
-def assert_authorize_rule(source_id: str, expected_identifier: str) -> None:
+def assert_authorize_rules(source_id: str, expected_rules: list[object]) -> None:
     manifest = json.loads(MANIFEST_PATH.read_text())
     source = manifest["sources"].get(source_id)
 
@@ -132,11 +145,9 @@ def assert_authorize_rule(source_id: str, expected_identifier: str) -> None:
         print(f"Expected meta.authorize to be a list for {source_id}", file=sys.stderr)
         raise SystemExit(1)
 
-    if not any(rule.get("identifier") == expected_identifier for rule in top_level_rules):
-        print(
-            f"Expected {source_id} to authorize identifier {expected_identifier}",
-            file=sys.stderr,
-        )
+    if top_level_rules != expected_rules:
+        print(f"Expected {source_id} to have rules: {expected_rules}", file=sys.stderr)
+        print(f"Actual rules: {top_level_rules}", file=sys.stderr)
         raise SystemExit(1)
 
 
@@ -144,9 +155,9 @@ def main() -> None:
     args = parse_args()
     run_parse(args.dbt_executable)
 
-    for source_id, expected_identifier in SOURCE_CASES.items():
-        assert_authorize_rule(source_id, expected_identifier)
-        print(f"passed: {source_id} inherits dbt_project.yml +meta")
+    for source_id, expected_rules in SOURCE_CASES.items():
+        assert_authorize_rules(source_id, expected_rules)
+        print(f"passed: {source_id} has expected meta.authorize")
 
 
 if __name__ == "__main__":

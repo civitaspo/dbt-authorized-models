@@ -41,3 +41,10 @@ sources:
               database: ".*"
               schema: ".*marts"
               identifier: "source_project_meta_table_report"
+    project_meta_source_with_table_meta:
+      +meta:
+        authorize:
+          - resource_type: "model"
+            database: ".*"
+            schema: ".*marts"
+            identifier: "source_project_meta_source_with_table_meta_allowed_report"

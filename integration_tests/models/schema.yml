@@ -66,6 +66,13 @@ models:
         authorize:
           - "*"
 
+  - name: source_project_meta_source_with_table_meta_report
+    description: Report that proves table-level source metadata overrides source-level dbt_project.yml metadata.
+    config:
+      meta:
+        authorize:
+          - "*"
+
 sources:
   - name: raw
     description: Protected raw data sources.
@@ -116,3 +123,15 @@ sources:
       - name: customers
         identifier: project_meta_table_customers
         description: Raw customer records authorized through table-level dbt_project.yml +meta.
+
+  - name: project_meta_source_with_table_meta
+    description: Source fixture with source-level dbt_project.yml +meta and table-level source.yml metadata.
+    schema: raw
+    tables:
+      - name: customers
+        identifier: project_meta_source_with_table_meta_customers
+        description: Raw customer records where table-level metadata has precedence over source-level dbt_project.yml +meta.
+        config:
+          meta:
+            authorize:
+              - "*"
