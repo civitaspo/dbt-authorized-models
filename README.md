@@ -414,6 +414,12 @@ Make every unprotected referenced model explicit with `authorize: ["*"]`, and ad
 
 ## Development
 
+Install the pinned development tools with mise:
+
+```bash
+mise install --locked
+```
+
 Run the unit tests from the repository root:
 
 ```bash
