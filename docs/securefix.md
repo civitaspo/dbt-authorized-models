@@ -19,7 +19,7 @@ Configure these in each client repository:
 
 - Variable `SECUREFIX_CLIENT_APP_ID`
 - Secret `SECUREFIX_CLIENT_PRIVATE_KEY`
-- Variable `SECUREFIX_SERVER_REPOSITORY`, set to `securefix-server`
+- Variable `SECUREFIX_SERVER_REPOSITORY`
 
 Configure these in the server repository:
 
