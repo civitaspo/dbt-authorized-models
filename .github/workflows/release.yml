@@ -31,10 +31,12 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Set up uv
-        uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
+      - name: Set up mise
+        uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
         with:
-          enable-cache: false
+          version: "2026.5.15"
+          install_args: "--locked"
+          cache: false
 
       - name: Install Python dependencies
         run: uv sync --frozen
