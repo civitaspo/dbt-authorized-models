@@ -433,6 +433,7 @@ Run the integration project compile check:
 
 ```bash
 uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
+uv run python integration_tests/assert_project_source_meta.py
 uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```
 
@@ -444,6 +445,7 @@ curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --to /
 /tmp/dbt-fusion-bin/dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
 /tmp/dbt-fusion-bin/dbt deps --project-dir integration_tests --profiles-dir integration_tests
 /tmp/dbt-fusion-bin/dbt parse --project-dir integration_tests --profiles-dir integration_tests
+uv run python integration_tests/assert_project_source_meta.py --dbt-executable /tmp/dbt-fusion-bin/dbt
 /tmp/dbt-fusion-bin/dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```
 
