@@ -2,17 +2,18 @@
 
 [![CI](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/ci.yml/badge.svg)](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/ci.yml)
 
-`dbt-authorized-models` is a dbt package for enforcing explicit authorization rules on model references.
+`dbt-authorized-models` is a dbt package for enforcing explicit authorization rules on model and source references.
 
-It lets model owners declare which dbt resources may reference a model, using regular-expression rules over dbt node properties such as `resource_type`, `database`, `schema`, `identifier`, `tags`, and `package_name`.
+It lets resource owners declare which dbt resources may reference a model or source, using regular-expression rules over dbt node properties such as `resource_type`, `database`, `schema`, `identifier`, `tags`, and `package_name`.
 
 ## Features
 
-- Deny-by-default authorization for protected models.
+- Deny-by-default authorization for protected resources.
+- Authorization checks for both `ref()` model dependencies and `source()` dependencies.
 - Regular-expression matching with full-string anchoring.
 - AND logic within a rule and OR logic across rules.
 - Configurable enforcement mode for failures or warnings.
-- Focused integration tests for the package macros.
+- Focused unit and integration tests for the package macros.
 
 ## Requirements
 
@@ -37,7 +38,7 @@ dbt deps
 
 ## Quick Start
 
-`dbt-authorized-models` is intentionally secure by default. After the hook is enabled, a referenced model with no `config.meta.authorize` rules denies all references to it.
+`dbt-authorized-models` is intentionally secure by default. After the hook is enabled, a referenced model or source with no `config.meta.authorize` rules denies all references to it.
 
 For an existing project, start in warning mode so you can see what would fail before you block builds:
 
@@ -58,7 +59,7 @@ Run a compile to inventory references:
 dbt compile
 ```
 
-If every model is currently missing `meta.authorize`, you will see warnings for each reference. That is expected during rollout.
+If every referenced model or source is currently missing `meta.authorize`, you will see warnings for each reference. That is expected during rollout.
 
 Make public models explicit with the wildcard rule:
 
@@ -106,7 +107,7 @@ vars:
 
 ## Mental Model
 
-Authorization rules live on the model being referenced, but each rule describes the model that is doing the referencing.
+Authorization rules live on the model or source being referenced, but each rule describes the dbt resource that is doing the referencing.
 
 ```text
 finance_report -> ref("sensitive_customer_data")
@@ -120,6 +121,32 @@ In this example:
 
 This package checks dbt graph metadata. It does not query your warehouse, create permissions, create views, or grant database privileges.
 
+## Relationship to dbt Model Access
+
+dbt's built-in [model access](https://docs.getdbt.com/docs/mesh/govern/model-access) feature and this package solve related but different problems.
+
+Use dbt model access when your policy can be expressed as a model interface boundary:
+
+- dbt model access is a first-party dbt governance feature based on `group` and `access`.
+- A model can be `private`, `protected`, or `public`.
+- `private` models are referenceable only inside the same group.
+- `protected` models are referenceable inside the same project or package, and this is the default for backward compatibility.
+- `public` models are referenceable by any group, package, or project.
+- For installed package projects, access restrictions are off by default unless the package sets `restrict-access: True`.
+
+Use `dbt-authorized-models` when you need an explicit allow-list for individual model or source dependencies:
+
+- Rules live in `meta.authorize` on the referenced model or source.
+- Missing or empty rules deny all references.
+- Rules match the referencing dbt node's metadata with regular expressions.
+- Policies can target properties such as `resource_type`, `database`, `schema`, `identifier`, `tags`, and `package_name`.
+- The same mechanism works for `ref()` dependencies and `source()` dependencies.
+- Enforcement can run in warning mode during rollout, then switch to failing mode.
+
+The two features can be used together. dbt model access is a good default for stable model interface boundaries in dbt Mesh-style projects. This package adds a stricter, code-reviewed dependency allow-list for cases such as sensitive tables, source references, schema-specific restrictions, package-specific restrictions, tag-based approval, or gradual adoption in an existing project.
+
+Neither feature grants database permissions. Continue to manage warehouse privileges separately with dbt grants or your platform's access-control system.
+
 ## What Gets Checked
 
 The `check_authorization()` macro runs from your root project's `on-run-start` hook.
@@ -128,7 +155,7 @@ The `check_authorization()` macro runs from your root project's `on-run-start` h
 - For commands such as `dbt compile` or `dbt run-operation`, the package checks all graph nodes when selected resources are not available.
 - Referencing resource types in `exclude_resource_types` are skipped.
 - By default, tests and analyses are skipped.
-- References to dbt sources are not checked by this package.
+- References to dbt models and sources are checked.
 
 ## What You Will See
 
