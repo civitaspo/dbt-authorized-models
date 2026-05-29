@@ -11,6 +11,7 @@ This repository contains `dbt-authorized-models`, a dbt package that enforces ex
 - Prefer clear dbt macros and integration tests over clever abstractions.
 - Document security-sensitive behavior, especially deny-by-default authorization semantics.
 - Avoid generated files unless they are required for reproducible dependency resolution.
+- Consult `docs/oss-retrospective.md` when applying lessons from this OSS launch to future repositories.
 - When Codex creates commits, sign them and include `Co-authored-by: Codex <codex@openai.com>`.
 - Do not rewrite or amend commits that have already been merged. If commit metadata is wrong after merge, create a clean replacement repository or follow the maintainer's explicit recovery plan.
 - Use squash merge only for pull requests in this repository.
@@ -20,7 +21,7 @@ This repository contains `dbt-authorized-models`, a dbt package that enforces ex
 ## Package Behavior Notes
 
 - Authorization is deny-by-default. Missing, empty, or malformed `meta.authorize` should fail closed.
-- The package must enforce both `ref()` model references and `source()` source references.
+- The package must enforce `ref()` model and snapshot references plus `source()` source references.
 - Source authorization should cover metadata declared in source YAML and `+meta` declared in `dbt_project.yml`.
 - Keep tests for dbt source metadata precedence: table-local `meta.authorize` wins over source-level `+meta`, and plain `meta` without the `+` config prefix in `dbt_project.yml` is not a valid inherited source configuration.
 - Treat dbt Fusion compatibility as a required behavior surface, not an optional smoke test.
