@@ -73,6 +73,13 @@ models:
         authorize:
           - "*"
 
+  - name: snapshot_customer_report
+    description: Authorized report that reads a protected snapshot.
+    config:
+      meta:
+        authorize:
+          - "*"
+
 sources:
   - name: raw
     description: Protected raw data sources.
@@ -88,6 +95,10 @@ sources:
                 database: ".*"
                 schema: ".*marts"
                 identifier: "source_customer_report"
+              - resource_type: "snapshot"
+                database: ".*"
+                schema: ".*snapshots"
+                identifier: "raw_customer_snapshot"
 
   - name: missing_authorize
     description: Source fixtures without authorization metadata.
