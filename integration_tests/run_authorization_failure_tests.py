@@ -60,12 +60,20 @@ SCENARIOS = [
         expected_message="Continuing because dbt_authorized_models.enforce is false",
         expect_success=True,
     ),
+    Scenario(
+        name="unauthorized snapshot source reference",
+        vars='{"enable_unauthorized_source_snapshot": true}',
+        expected_message=(
+            "Referencing: unauthorized_source_snapshot "
+            "(snapshot.dbt_authorized_models_integration_tests.unauthorized_source_snapshot)"
+        ),
+    ),
 ]
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run source authorization failure-path integration tests."
+        description="Run authorization failure-path integration tests."
     )
     parser.add_argument(
         "--dbt-executable",

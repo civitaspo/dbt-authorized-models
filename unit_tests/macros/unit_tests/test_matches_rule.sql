@@ -19,4 +19,15 @@
   {{ dbt_unittest.assert_false(dbt_authorized_models.matches_rule({'resource_type': 'model', 'database': 'analytics', 'schema': 'staging'}, node)) }}
   {{ dbt_unittest.assert_false(dbt_authorized_models.matches_rule({'resource_type': 'model', 'database': 'analytics', 'schema': 'marts', 'identifier': 'customers', 'tags': 'pii'}, node)) }}
   {{ dbt_unittest.assert_false(dbt_authorized_models.matches_rule({'name': 'orders'}, node)) }}
+
+  {% set snapshot_node = {
+    'resource_type': 'snapshot',
+    'database': 'analytics',
+    'schema': 'snapshots',
+    'identifier': 'customer_snapshot',
+    'name': 'customer_snapshot'
+  } %}
+  {{ dbt_unittest.assert_true(dbt_authorized_models.matches_rule({'resource_type': 'snapshot'}, snapshot_node)) }}
+  {{ dbt_unittest.assert_true(dbt_authorized_models.matches_rule({'resource_type': 'snapshot', 'database': 'analytics', 'schema': 'snapshots', 'identifier': 'customer_snapshot'}, snapshot_node)) }}
+  {{ dbt_unittest.assert_false(dbt_authorized_models.matches_rule({'resource_type': 'model'}, snapshot_node)) }}
 {% endmacro %}

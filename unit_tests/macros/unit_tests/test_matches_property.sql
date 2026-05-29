@@ -60,4 +60,15 @@
     'identifier': 'daily_finance'
   } %}
   {{ dbt_unittest.assert_false(dbt_authorized_models.matches_property('tags', 'finance', node_without_tags)) }}
+
+  {% set snapshot_node = {
+    'resource_type': 'snapshot',
+    'database': 'analytics',
+    'schema': 'snapshots',
+    'identifier': 'customer_snapshot',
+    'name': 'customer_snapshot'
+  } %}
+  {{ dbt_unittest.assert_true(dbt_authorized_models.matches_property('resource_type', 'snapshot', snapshot_node)) }}
+  {{ dbt_unittest.assert_true(dbt_authorized_models.matches_property('schema', 'snapshots', snapshot_node)) }}
+  {{ dbt_unittest.assert_true(dbt_authorized_models.matches_property('identifier', 'customer_snapshot', snapshot_node)) }}
 {% endmacro %}
