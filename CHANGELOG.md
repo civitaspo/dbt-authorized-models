@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- lock file maintenance (#36)
 - update actions/setup-python action to v7 (#32)
 - migrate Renovate config (#33)
 - bump securefix-server reusables for job summary links (#35)
