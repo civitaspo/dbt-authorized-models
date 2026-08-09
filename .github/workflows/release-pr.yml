@@ -14,6 +14,6 @@ concurrency:
 
 jobs:
   prepare:
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@f0cd60319a245bc10c474de01fce3d89f5317ca2 # f0cd603
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@f0cd60319a245bc10c474de01fce3d89f5317ca2 # v0.1.0
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
