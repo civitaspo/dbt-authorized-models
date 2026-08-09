@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  workflows:
-    name: GitHub Actions
+  lint:
+    name: lint
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -28,7 +28,21 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Forbid CHANGELOG edits outside release/next
+        if: github.event_name == 'pull_request' && github.head_ref != 'release/next'
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          if git diff --name-only "${base}...${head}" | grep -qx 'CHANGELOG.md'; then
+            echo "CHANGELOG.md is owned by the Release PR (git-cliff)." >&2
+            echo "Do not edit it on feature PRs; use Conventional Commit subjects instead." >&2
+            echo "See docs/releasing.md." >&2
+            exit 1
+          fi
 
       - name: Set up mise
         uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
@@ -58,6 +72,10 @@ jobs:
         run: |
           disable-checkout-persist-credentials
           git diff --exit-code -- .github/workflows
+
+      - name: ShellCheck release scripts
+        if: hashFiles('scripts/**/*.sh') != ''
+        run: find scripts -type f -name '*.sh' -print0 | xargs -0 -r shellcheck
 
       - name: Run ghalint
         run: ghalint run

@@ -6,16 +6,20 @@ This repository contains `dbt-authorized-models`, a dbt package that enforces ex
 
 ## Contributor Expectations
 
-- Write commits, pull request descriptions, documentation, comments, and user-facing messages in English.
+- Write commits, pull request titles/bodies, documentation, comments, and user-facing messages in **English only**.
+- Use Conventional Commits for pull request titles (`feat`, `fix`, `docs`, `refactor`, `test`, `ci`, `build`, `chore`, `perf`, `revert`; use `!` for breaking changes).
+- Never push directly to `main`. Open a pull request and squash-merge after required checks pass.
 - Keep changes small, reviewable, and focused on the package behavior described in the README.
 - Prefer clear dbt macros and integration tests over clever abstractions.
 - Document security-sensitive behavior, especially deny-by-default authorization semantics.
 - Avoid generated files unless they are required for reproducible dependency resolution.
+- Sign commits (SSH signing is configured for maintainers and coding agents committing as `civitaspo`).
 - When Codex creates commits, sign them and include `Co-authored-by: Codex <codex@openai.com>`.
 - Do not rewrite or amend commits that have already been merged. If commit metadata is wrong after merge, create a clean replacement repository or follow the maintainer's explicit recovery plan.
 - Use squash merge only for pull requests in this repository.
 - If local `main` has diverged, branch from `origin/main` and leave the local branch history untouched.
 - Keep pull request descriptions complete enough for an outside OSS maintainer to review, but do not include unnecessary personal information.
+- Do not store strong credentials in this repository. GPG keys, machine-user PATs, and `contents: write` app keys live only in `civitaspo/securefix-server`.
 
 ## Package Behavior Notes
 
@@ -27,17 +31,25 @@ This repository contains `dbt-authorized-models`, a dbt package that enforces ex
 
 ## Tooling
 
-- Install pinned tools with mise:
+Install pinned tools with mise:
 
 ```bash
 mise install --locked
+```
+
+Before opening a pull request, run:
+
+```bash
+mise run lint
+mise run test
+mise run test:fusion
 ```
 
 - Use `uv run` consistently for Python and dbt commands in local docs, scripts, and GitHub Actions.
 - Do not mix equivalent entry points such as `uv run python ...` and `python3 ...` for the same workflow.
 - Do not hide CI workflows behind mise tasks; keep the failing command visible in the GitHub Actions step.
 - Prefer Python test helpers with dbt programmatic invocation over shell scripts for negative authorization assertions.
-- Keep `uv`, ShellCheck, ghalint, pinact, and disable-checkout-persist-credentials managed by mise.
+- Keep `uv`, ShellCheck, git-cliff, ghalint, pinact, and disable-checkout-persist-credentials managed by mise.
 
 ## GitHub Actions
 
@@ -46,7 +58,10 @@ mise install --locked
 - Keep workflow permissions least-privilege and job names descriptive.
 - Run workflow linting with ghalint, pinact, and disable-checkout-persist-credentials.
 - Use Securefix for automated workflow security fixes when configured.
+- Approvals for trusted authors are requested through `csm-actions/approve-pr-action`.
 - Do not provide hidden defaults for required repository variables in workflows; fail clearly when required configuration is missing.
+
+See [docs/securefix.md](docs/securefix.md) and [docs/releasing.md](docs/releasing.md).
 
 ## Verification
 
@@ -70,12 +85,8 @@ When changing source reference behavior, include tests for successful source aut
 
 When changing compatibility-sensitive macro behavior, also verify with dbt Fusion using the existing workflow pattern.
 
-## Release Checklist
+## Release
 
-- Update `CHANGELOG.md` with user-facing release notes.
-- Bump `version` in `dbt_project.yml`.
-- Update README installation examples to the new tag.
-- Open a normal pull request and wait for CI to pass.
-- Squash merge the release preparation pull request.
-- Create a signed annotated release tag from the merged `origin/main` commit.
-- Push the tag and watch the release workflow until the GitHub Release is published.
+Releases are prepared by the **Release PR** workflow (git-cliff + Securefix `release/next`). A human squash-merges `chore(release): vX.Y.Z`; **Release Tag** creates the annotated tag and asks `civitaspo/securefix-server` to publish the GitHub Release.
+
+Do not edit `CHANGELOG.md` on feature PRs. See [docs/releasing.md](docs/releasing.md).
