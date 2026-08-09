@@ -22,8 +22,8 @@
       "matchManagers": [
         "github-actions"
       ],
-      "matchPackageNames": [
-        "civitaspo/securefix-server"
+      "matchPackagePatterns": [
+        "^civitaspo/securefix-server"
       ],
       "automerge": true
     },
