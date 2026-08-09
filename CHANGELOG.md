@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- bump securefix-server reusables for job summary links (#35)
 - use securefix-server release workflow reusables (#24)
 - update jdx/mise-action action to v4.2.4 (#28)
 - update dependency python to 3.14 (#27)
