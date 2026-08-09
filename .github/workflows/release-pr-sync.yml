@@ -21,4 +21,4 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr-sync.yml@76147712338365a3f6c0a72a1f283b3241f86917 # v0.1.0
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr-sync.yml@76147712338365a3f6c0a72a1f283b3241f86917 # v0.1.1
