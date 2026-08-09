@@ -4,7 +4,7 @@
 "aqua:orhun/git-cliff" = "2.13.1"
 "aqua:suzuki-shunsuke/disable-checkout-persist-credentials" = "1.0.0"
 "aqua:suzuki-shunsuke/ghalint" = "1.5.6"
-"aqua:suzuki-shunsuke/pinact" = "4.0.0"
+"aqua:suzuki-shunsuke/pinact" = "4.1.1"
 
 [tasks.lint]
 description = "Run local lint checks"
