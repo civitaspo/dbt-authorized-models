@@ -26,6 +26,18 @@ url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellche
 checksum = "sha256:56affdd8de5527894dca6dc3d7e0a99a873b0f004d7aabc30ae407d3f48b0a79"
 url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.darwin.aarch64.tar.xz"
 
+[[tools."aqua:orhun/git-cliff"]]
+version = "2.13.1"
+backend = "aqua:orhun/git-cliff"
+
+[tools."aqua:orhun/git-cliff"."platforms.linux-x64"]
+checksum = "sha256:200d2535da6d9703f3bcc8a4d159c3b55eacdb01cf2148c55b3eee9dd04d5249"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-x86_64-unknown-linux-musl.tar.gz"
+
+[tools."aqua:orhun/git-cliff"."platforms.macos-arm64"]
+checksum = "sha256:21547ae4a0421164070ab75c2522864ea5565858a011fabc5f583061b20f1226"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-aarch64-apple-darwin.tar.gz"
+
 [[tools."aqua:suzuki-shunsuke/disable-checkout-persist-credentials"]]
 version = "1.0.0"
 backend = "aqua:suzuki-shunsuke/disable-checkout-persist-credentials"

@@ -1,6 +1,65 @@
 [tools]
 "aqua:astral-sh/uv" = "0.11.16"
 "aqua:koalaman/shellcheck" = "0.11.0"
+"aqua:orhun/git-cliff" = "2.13.1"
 "aqua:suzuki-shunsuke/disable-checkout-persist-credentials" = "1.0.0"
 "aqua:suzuki-shunsuke/ghalint" = "1.5.6"
 "aqua:suzuki-shunsuke/pinact" = "4.0.0"
+
+[tasks.lint]
+description = "Run local lint checks"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+if [ -d scripts ]; then
+  find scripts -type f -name '*.sh' -print0 | xargs -0 -r shellcheck
+fi
+if [ -d .github/workflows ]; then
+  ghalint run
+  pinact run --check --verify-comment
+fi
+"""
+
+[tasks.test]
+description = "Run package unit and integration tests (dbt Core)"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+uv sync --frozen
+uv run dbt deps --project-dir unit_tests --profiles-dir unit_tests
+uv run dbt run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+uv run dbt deps --project-dir integration_tests --profiles-dir integration_tests
+uv run python integration_tests/run_authorization_failure_tests.py
+uv run python integration_tests/assert_project_source_meta.py
+uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
+"""
+
+[tasks."test:fusion"]
+description = "Run package unit and integration tests with dbt Fusion"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+FUSION_BIN_DIR="${DBT_FUSION_BIN_DIR:-/tmp/dbt-fusion-bin}"
+mkdir -p "$FUSION_BIN_DIR"
+if [ ! -x "$FUSION_BIN_DIR/dbt" ]; then
+  # install.sh may exit non-zero when it cannot edit the user shell rc; the binary is enough.
+  set +e
+  curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
+    | sh -s -- --to "$FUSION_BIN_DIR" --update
+  set -e
+fi
+if [ ! -x "$FUSION_BIN_DIR/dbt" ]; then
+  echo "dbt Fusion binary not found at $FUSION_BIN_DIR/dbt" >&2
+  exit 1
+fi
+DBT_FUSION="$FUSION_BIN_DIR/dbt"
+"$DBT_FUSION" --version
+"$DBT_FUSION" deps --project-dir unit_tests --profiles-dir unit_tests
+"$DBT_FUSION" run-operation run_unit_tests --project-dir unit_tests --profiles-dir unit_tests
+"$DBT_FUSION" deps --project-dir integration_tests --profiles-dir integration_tests
+"$DBT_FUSION" parse --project-dir integration_tests --profiles-dir integration_tests
+uv sync --frozen
+uv run python integration_tests/run_authorization_failure_tests.py --dbt-executable "$DBT_FUSION"
+uv run python integration_tests/assert_project_source_meta.py --dbt-executable "$DBT_FUSION"
+"$DBT_FUSION" compile --project-dir integration_tests --profiles-dir integration_tests
+"""

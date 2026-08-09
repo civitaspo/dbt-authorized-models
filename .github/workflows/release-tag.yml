@@ -1,0 +1,143 @@
+name: Release Tag
+
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+    inputs:
+      merge_sha:
+        description: Commit SHA to tag (defaults to main HEAD when empty)
+        required: false
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: release-tag-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: tag and request release
+    if: |
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       github.event.pull_request.head.ref == 'release/next') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 10
+
+    steps:
+      - name: Resolve merge commit
+        id: target
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          INPUT_MERGE_SHA: ${{ inputs.merge_sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            merge_sha=$PR_MERGE_SHA
+          elif [ -n "${INPUT_MERGE_SHA:-}" ]; then
+            merge_sha=$INPUT_MERGE_SHA
+          else
+            merge_sha=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha')
+          fi
+          if ! printf '%s\n' "$merge_sha" | grep -Eq '^[0-9a-f]{40}$'; then
+            echo "Invalid merge commit SHA: $merge_sha" >&2
+            exit 1
+          fi
+          echo "merge_sha=$merge_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Check out merge commit
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ steps.target.outputs.merge_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Read release version
+        id: release
+        env:
+          MERGE_SHA: ${{ steps.target.outputs.merge_sha }}
+        run: |
+          set -euo pipefail
+          version=$(cat .release-version)
+          if ! printf '%s\n' "$version" | grep -Eq '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'; then
+            echo "Invalid release version: $version" >&2
+            exit 1
+          fi
+          test "$(git rev-parse HEAD)" = "$MERGE_SHA"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create annotated tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGE_SHA: ${{ steps.target.outputs.merge_sha }}
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          # gh api prints the 404 JSON body on stdout even on failure; only treat a
+          # successful HTTP response as an existing tag.
+          if existing_object=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG" --jq '.object.sha' 2>/dev/null); then
+            existing_commit=$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$existing_object" --jq '.object.sha')
+            test "$existing_commit" = "$MERGE_SHA"
+            echo "Tag $TAG already points to the merge commit."
+            exit 0
+          fi
+
+          tag_object=$(gh api --method POST "repos/$GITHUB_REPOSITORY/git/tags" \
+            -f tag="$TAG" \
+            -f message="Release $TAG" \
+            -f object="$MERGE_SHA" \
+            -f type=commit \
+            --jq '.sha')
+          gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f ref="refs/tags/$TAG" \
+            -f sha="$tag_object"
+
+      - name: Create Securefix server token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.SECUREFIX_CLIENT_APP_ID }}
+          private-key: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
+          owner: civitaspo
+          repositories: securefix-server
+          permission-issues: write
+
+      - name: Request server-side release
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          SERVER_REPOSITORY: ${{ vars.SECUREFIX_SERVER_REPOSITORY }}
+          TAG: ${{ steps.release.outputs.tag }}
+          MERGE_SHA: ${{ steps.target.outputs.merge_sha }}
+        run: |
+          set -euo pipefail
+          test -n "$SERVER_REPOSITORY"
+          # SECUREFIX_SERVER_REPOSITORY is the repo name only (securefix-action input format).
+          # Include the tagged merge commit SHA when it fits GitHub's 100-char label
+          # description limit. Release Tag on pull_request.closed uses
+          # workflow_run.head_sha = PR head, which differs from the squash merge commit.
+          server_full_name="${GITHUB_REPOSITORY_OWNER}/${SERVER_REPOSITORY}"
+          label_name="release-dbt-auth-${GITHUB_RUN_ID}-${TAG}"
+          description_with_sha="${GITHUB_REPOSITORY}/${GITHUB_RUN_ID}/${TAG}/${MERGE_SHA}"
+          description_without_sha="${GITHUB_REPOSITORY}/${GITHUB_RUN_ID}/${TAG}"
+          if [ "${#description_with_sha}" -le 100 ]; then
+            description=$description_with_sha
+          else
+            echo "Omitting merge SHA from label description (${#description_with_sha} > 100 chars)."
+            description=$description_without_sha
+          fi
+          if [ "${#description}" -gt 100 ]; then
+            echo "Label description exceeds GitHub's 100-character limit: $description" >&2
+            exit 1
+          fi
+          gh api --method POST "repos/${server_full_name}/labels" \
+            -f name="$label_name" \
+            -f color="1f6feb" \
+            -f description="$description"
