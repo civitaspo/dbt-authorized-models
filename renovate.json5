@@ -1,53 +1,53 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-    ":semanticCommits"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:best-practices',
+    ':semanticCommits',
   ],
-  "dependencyDashboard": false,
-  "labels": [
-    "dependencies"
+  dependencyDashboard: false,
+  labels: [
+    'dependencies',
   ],
-  "timezone": "Asia/Tokyo",
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true
+  timezone: 'Asia/Tokyo',
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true,
   },
-  "mise": {
-    "enabled": true
+  mise: {
+    enabled: true,
   },
-  "packageRules": [
+  packageRules: [
     {
-      "description": "Automerge securefix-server reusable workflow pin bumps",
-      "matchManagers": [
-        "github-actions"
+      description: 'Automerge securefix-server reusable workflow pin bumps',
+      matchManagers: [
+        'github-actions',
       ],
-      "matchPackagePatterns": [
-        "^civitaspo/securefix-server"
+      automerge: true,
+      matchPackageNames: [
+        '/^civitaspo/securefix-server/',
       ],
-      "automerge": true
     },
     {
-      "description": "Automerge non-major updates (minor, patch, pin, digest)",
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "pinDigest",
-        "digest"
+      description: 'Automerge non-major updates (minor, patch, pin, digest)',
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+        'pin',
+        'pinDigest',
+        'digest',
       ],
-      "automerge": true
+      automerge: true,
     },
     {
-      "description": "Do not automerge major updates",
-      "matchUpdateTypes": [
-        "major"
+      description: 'Do not automerge major updates',
+      matchUpdateTypes: [
+        'major',
       ],
-      "automerge": false,
-      "labels": [
-        "dependencies",
-        "major"
-      ]
-    }
-  ]
+      automerge: false,
+      labels: [
+        'dependencies',
+        'major',
+      ],
+    },
+  ],
 }
