@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   tag:
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@fbfe1e36ba343b0225dfe5681791799f75b02b96
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@ccb564da7e61d22e1718aecc85af05ac43383249
     with:
       merge_sha: ${{ inputs.merge_sha }}
     secrets:
