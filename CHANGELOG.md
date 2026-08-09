@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update actions/checkout action to v4.4.0 (#22)
 - add auto-approve and CSM release workflows (#20)
 - Bump msgpack from 1.1.2 to 1.2.1 (#18)
 - cover snapshot authorization
