@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.1] - 2026-08-09
 
 
+### Bug Fixes
+
+- update dependency dbt-duckdb to >=1.11,<1.12 (#30)
+- update dependency dbt-core to >=1.12,<1.13 (#29)
+
+
 ### Documentation
 
 - compare with dbt model access
