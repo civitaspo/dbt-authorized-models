@@ -18,6 +18,16 @@
   },
   "packageRules": [
     {
+      "description": "Automerge securefix-server reusable workflow pin bumps",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "civitaspo/securefix-server"
+      ],
+      "automerge": true
+    },
+    {
       "description": "Automerge non-major updates (minor, patch, pin, digest)",
       "matchUpdateTypes": [
         "minor",
