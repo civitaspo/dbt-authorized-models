@@ -18,12 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 
+- point releasing guide at shared client-releases spec (#34)
 - compare with dbt model access
 - update agent guidance from retrospectives
 
 
 ### Maintenance
 
+- use securefix-server release workflow reusables (#24)
 - update jdx/mise-action action to v4.2.4 (#28)
 - update dependency python to 3.14 (#27)
 - update dependency jdx/mise to v2026.8.3 (#26)
