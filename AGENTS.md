@@ -6,11 +6,14 @@ This repository contains `dbt-authorized-models`, a dbt package that enforces ex
 
 ## Contributor Expectations
 
-- Write commits, pull request descriptions, documentation, comments, and user-facing messages in English.
+- Write commits, pull request titles/bodies, documentation, comments, and user-facing messages in **English only**.
+- Use Conventional Commits for pull request titles (`feat`, `fix`, `docs`, `refactor`, `test`, `ci`, `build`, `chore`, `perf`, `revert`; use `!` for breaking changes).
+- Never push directly to `main`. Open a pull request and squash-merge after required checks pass.
 - Keep changes small, reviewable, and focused on the package behavior described in the README.
 - Prefer clear dbt macros and integration tests over clever abstractions.
 - Document security-sensitive behavior, especially deny-by-default authorization semantics.
 - Avoid generated files unless they are required for reproducible dependency resolution.
+- Do not edit `CHANGELOG.md` on feature PRs; git-cliff owns it via the Release PR.
 - When Codex creates commits, sign them and include `Co-authored-by: Codex <codex@openai.com>`.
 - Do not rewrite or amend commits that have already been merged. If commit metadata is wrong after merge, create a clean replacement repository or follow the maintainer's explicit recovery plan.
 - Use squash merge only for pull requests in this repository.
@@ -37,7 +40,7 @@ mise install --locked
 - Do not mix equivalent entry points such as `uv run python ...` and `python3 ...` for the same workflow.
 - Do not hide CI workflows behind mise tasks; keep the failing command visible in the GitHub Actions step.
 - Prefer Python test helpers with dbt programmatic invocation over shell scripts for negative authorization assertions.
-- Keep `uv`, ShellCheck, ghalint, pinact, and disable-checkout-persist-credentials managed by mise.
+- Keep `uv`, ShellCheck, git-cliff, ghalint, pinact, and disable-checkout-persist-credentials managed by mise.
 
 ## GitHub Actions
 
@@ -45,7 +48,8 @@ mise install --locked
 - Use `persist-credentials: false` with `actions/checkout` unless a workflow explicitly needs push credentials.
 - Keep workflow permissions least-privilege and job names descriptive.
 - Run workflow linting with ghalint, pinact, and disable-checkout-persist-credentials.
-- Use Securefix for automated workflow security fixes when configured.
+- Use Securefix for automated workflow security fixes and release PR commits when configured.
+- Approvals for trusted authors are requested through `csm-actions/approve-pr-action`.
 - Do not provide hidden defaults for required repository variables in workflows; fail clearly when required configuration is missing.
 
 ## Verification
@@ -70,12 +74,12 @@ When changing source reference behavior, include tests for successful source aut
 
 When changing compatibility-sensitive macro behavior, also verify with dbt Fusion using the existing workflow pattern.
 
-## Release Checklist
+## Release Flow
 
-- Update `CHANGELOG.md` with user-facing release notes.
-- Bump `version` in `dbt_project.yml`.
-- Update README installation examples to the new tag.
-- Open a normal pull request and wait for CI to pass.
-- Squash merge the release preparation pull request.
-- Create a signed annotated release tag from the merged `origin/main` commit.
-- Push the tag and watch the release workflow until the GitHub Release is published.
+Releases are automated after squash-merges to `main`:
+
+1. The Release PR workflow runs git-cliff and opens or updates `release/next` with `.release-version` and `CHANGELOG.md`.
+2. Squash-merge the `chore(release): vX.Y.Z` pull request after checks pass.
+3. The Release Tag workflow creates the annotated tag and requests a server-side GitHub Release via `civitaspo/securefix-server`.
+
+See [docs/releasing.md](docs/releasing.md) and [docs/securefix.md](docs/securefix.md).

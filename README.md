@@ -508,6 +508,12 @@ uv run python integration_tests/assert_project_source_meta.py --dbt-executable /
 /tmp/dbt-fusion-bin/dbt compile --project-dir integration_tests --profiles-dir integration_tests
 ```
 
+## Documentation
+
+- [Contributing](CONTRIBUTING.md)
+- [Securefix / CI automation](docs/securefix.md)
+- [Releasing](docs/releasing.md)
+
 ## License
 
 Apache License 2.0.
