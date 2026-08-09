@@ -16,6 +16,7 @@ jobs:
   prepare:
     permissions:
       contents: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@f0cd60319a245bc10c474de01fce3d89f5317ca2 # v0.1.0
+      pull-requests: read
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@76147712338365a3f6c0a72a1f283b3241f86917 # v0.1.0
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
