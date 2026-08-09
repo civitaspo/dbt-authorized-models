@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update dependency python to 3.14 (#27)
+- update dependency jdx/mise to v2026.8.3 (#26)
 - update dependency aqua:suzuki-shunsuke/pinact to v4.1.1 (#25)
 - update dependency aqua:astral-sh/uv to v0.12.3 (#23)
 - update actions/checkout action to v4.4.0 (#22)
