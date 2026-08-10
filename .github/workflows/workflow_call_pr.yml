@@ -10,11 +10,16 @@ on:
         description: "PR mode: apply autofixes via SecureFix. Push mode: check-only."
         type: boolean
         required: true
+      suite:
+        description: "full = all jobs; title = pr-title only (PR edited)."
+        type: string
+        required: true
 
 permissions: {}
 
 jobs:
   integration-tests:
+    if: ${{ inputs.suite == 'full' }}
     name: Tests (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     permissions:
@@ -68,6 +73,7 @@ jobs:
         run: uv run dbt compile --project-dir integration_tests --profiles-dir integration_tests
 
   fusion-compatibility:
+    if: ${{ inputs.suite == 'full' }}
     name: dbt Fusion compatibility
     runs-on: ubuntu-latest
     permissions:
@@ -128,6 +134,7 @@ jobs:
           "$RUNNER_TEMP/dbt-fusion-bin/dbt" compile --project-dir integration_tests --profiles-dir integration_tests
 
   lint:
+    if: ${{ inputs.suite == 'full' }}
     name: lint
     runs-on: ubuntu-latest
     permissions:
@@ -232,8 +239,8 @@ jobs:
         run: git diff --exit-code -- .github/workflows
 
   pr-title:
+    if: ${{ inputs.autofix && (inputs.suite == 'full' || inputs.suite == 'title') }}
     name: pr-title
-    if: inputs.autofix
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read

@@ -1,5 +1,6 @@
 # Single pull_request entrypoint (Shunsuke pattern).
 # Required check: status-check (only). Real work lives in workflow_call_pr.yml.
+# Title edits (`edited`) run title-only; open/sync/reopen run the full suite.
 
 name: CI
 
@@ -18,15 +19,28 @@ on:
 permissions: {}
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: >-
+    ci-${{ github.workflow }}-${{ github.ref }}-${{
+      github.event_name == 'pull_request' && github.event.action == 'edited' && 'title'
+      || 'full'
+    }}
   cancel-in-progress: true
 
 jobs:
   checks:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.action != 'edited'
     uses: ./.github/workflows/workflow_call_pr.yml
     with:
       autofix: true
+      suite: full
+    secrets: inherit
+
+  title-only:
+    if: github.event_name == 'pull_request' && github.event.action == 'edited'
+    uses: ./.github/workflows/workflow_call_pr.yml
+    with:
+      autofix: true
+      suite: title
     secrets: inherit
 
   checks-push:
@@ -34,6 +48,7 @@ jobs:
     uses: ./.github/workflows/workflow_call_pr.yml
     with:
       autofix: false
+      suite: full
     secrets: inherit
 
   status-check:
@@ -41,6 +56,7 @@ jobs:
     if: always() && !cancelled() && github.event_name == 'pull_request'
     needs:
       - checks
+      - title-only
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 5
@@ -48,8 +64,13 @@ jobs:
       - name: Require checks success
         run: |
           set -euo pipefail
-          result="${{ needs.checks.result }}"
-          echo "checks result: ${result}"
-          if [[ "${result}" != "success" ]]; then
-            exit 1
-          fi
+          ok() {
+            local result="$1"
+            local label="$2"
+            echo "${label}: ${result}"
+            if [[ "${result}" != "success" && "${result}" != "skipped" ]]; then
+              exit 1
+            fi
+          }
+          ok "${{ needs.checks.result }}" "checks"
+          ok "${{ needs.title-only.result }}" "title-only"
