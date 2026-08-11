@@ -1,7 +1,5 @@
-# Single CI entrypoint (Shunsuke pattern).
-# Required check: status-check (only). Real work lives in wc-* units.
-# Title edits (`edited`) run pr-title only; open/sync/reopen run the full suite.
-# Push/workflow_dispatch run tests without pr-title.
+# Outermost entry: event identification only.
+# Which checks to run is decided inside workflow_call_pr.yml.
 
 name: CI
 
@@ -28,41 +26,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  integration-tests:
-    if: github.event_name != 'pull_request' || github.event.action != 'edited'
-    uses: ./.github/workflows/wc-integration-tests.yml
-    permissions:
-      contents: read
-
-  fusion-compatibility:
-    if: github.event_name != 'pull_request' || github.event.action != 'edited'
-    uses: ./.github/workflows/wc-fusion-compatibility.yml
-    permissions:
-      contents: read
-
-  lint:
-    if: github.event_name != 'pull_request' || github.event.action != 'edited'
-    uses: ./.github/workflows/wc-lint.yml
+  checks:
+    uses: ./.github/workflows/workflow_call_pr.yml
     with:
       autofix: ${{ github.event_name == 'pull_request' }}
+      changed_title_only: ${{ github.event_name == 'pull_request' && github.event.action == 'edited' }}
     secrets: inherit
-    permissions:
-      contents: read
-
-  pr-title:
-    if: github.event_name == 'pull_request'
-    uses: ./.github/workflows/wc-pr-title.yml
-    permissions:
-      pull-requests: read
 
   status-check:
     name: status-check
     if: always() && !cancelled() && github.event_name == 'pull_request'
     needs:
-      - integration-tests
-      - fusion-compatibility
-      - lint
-      - pr-title
+      - checks
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 5
@@ -70,15 +45,8 @@ jobs:
       - name: Require checks success
         run: |
           set -euo pipefail
-          ok() {
-            local result="$1"
-            local label="$2"
-            echo "${label}: ${result}"
-            if [[ "${result}" != "success" && "${result}" != "skipped" ]]; then
-              exit 1
-            fi
-          }
-          ok "${{ needs.integration-tests.result }}" "integration-tests"
-          ok "${{ needs.fusion-compatibility.result }}" "fusion-compatibility"
-          ok "${{ needs.lint.result }}" "lint"
-          ok "${{ needs.pr-title.result }}" "pr-title"
+          result="${{ needs.checks.result }}"
+          echo "checks result: ${result}"
+          if [[ "${result}" != "success" ]]; then
+            exit 1
+          fi
