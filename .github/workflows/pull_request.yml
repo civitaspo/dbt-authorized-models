@@ -1,0 +1,43 @@
+# Outermost PR entry: bind the pull_request event only.
+# Event facts (e.g. title-only edit) are computed here and passed into workflow_call_pr.
+
+name: CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+# Separate title edits from full CI so editing a title does not cancel in-flight test/lint.
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.ref }}-${{
+      github.event.action == 'edited' && 'title' || 'full'
+    }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    uses: ./.github/workflows/workflow_call_pr.yml
+    with:
+      changed_title_only: ${{ github.event.action == 'edited' }}
+    secrets: inherit
+
+  status-check:
+    runs-on: ubuntu-latest
+    if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
+    timeout-minutes: 10
+    permissions: {}
+    needs:
+      - checks
+    steps:
+      - run: exit 1

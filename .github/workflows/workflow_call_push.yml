@@ -1,0 +1,28 @@
+# Push aggregator: check-only wc-* units (no SecureFix, no pr-title).
+
+name: Push checks (workflow_call)
+
+on:
+  workflow_call:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+jobs:
+  integration-tests:
+    uses: ./.github/workflows/wc-integration-tests.yml
+    permissions:
+      contents: read
+
+  fusion-compatibility:
+    uses: ./.github/workflows/wc-fusion-compatibility.yml
+    permissions:
+      contents: read
+
+  lint:
+    uses: ./.github/workflows/wc-lint.yml
+    permissions:
+      contents: read

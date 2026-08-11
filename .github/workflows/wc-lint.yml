@@ -1,0 +1,53 @@
+# Check-only lint (workflow_call). Used from workflow_call_push.yml.
+
+name: Lint (workflow_call)
+
+on:
+  workflow_call:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Set up mise
+        uses: jdx/mise-action@7e36c90d9ab29c415a2384db3006f3ec8a8cc654 # v4.2.4
+        with:
+          version: "2026.8.3"
+          install_args: "--locked"
+          cache: false
+
+      - name: Check action pins
+        env:
+          PINACT_GITHUB_TOKEN: ${{ github.token }}
+        run: pinact run --check --verify-comment
+
+      - name: Ensure checkout credentials are disabled
+        run: |
+          disable-checkout-persist-credentials
+          git diff --exit-code -- .github/workflows
+
+      - name: ShellCheck release scripts
+        if: hashFiles('scripts/**/*.sh') != ''
+        run: find scripts -type f -name '*.sh' -print0 | xargs -0 -r shellcheck
+
+      - name: Run ghalint
+        run: ghalint run
+
+      - name: Check workflow formatting
+        run: git diff --exit-code -- .github/workflows

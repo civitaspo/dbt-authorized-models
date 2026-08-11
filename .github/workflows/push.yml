@@ -1,0 +1,25 @@
+# Outermost push entry: bind push / workflow_dispatch only.
+# Check-only (no SecureFix / no pr-title) lives in workflow_call_push.yml.
+
+name: Push
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    uses: ./.github/workflows/workflow_call_push.yml
+    secrets: inherit
