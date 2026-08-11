@@ -38,11 +38,10 @@ jobs:
 
   status-check:
     runs-on: ubuntu-latest
-    if: always()
+    if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
     timeout-minutes: 10
     permissions: {}
     needs:
       - checks
     steps:
       - run: exit 1
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
