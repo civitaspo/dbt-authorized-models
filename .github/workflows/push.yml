@@ -22,4 +22,5 @@ concurrency:
 jobs:
   checks:
     uses: ./.github/workflows/workflow_call_push.yml
-    secrets: inherit
+    permissions:
+      contents: read
