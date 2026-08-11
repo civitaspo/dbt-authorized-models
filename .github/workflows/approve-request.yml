@@ -19,37 +19,9 @@ concurrency:
 
 jobs:
   approve:
-    name: approve
-    if: |
-      (
-        github.event_name == 'pull_request_target' &&
-        contains(fromJSON('["civitaspo", "renovate[bot]", "dependabot[bot]", "civitaspo-securefix-server[bot]"]'), github.actor)
-      ) || (
-        github.event_name == 'issue_comment' &&
-        github.event.issue.pull_request &&
-        github.event.comment.body == '/approve' &&
-        github.event.comment.user.login == 'civitaspo'
-      )
-    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
-    timeout-minutes: 10
-
-    steps:
-      - name: Request pull request approval
-        uses: csm-actions/approve-pr-action@452271472f121d6d2f8e7a0761488d2fcc29b715 # v0.2.0
-        with:
-          app_id: ${{ vars.SECUREFIX_CLIENT_APP_ID }}
-          app_private_key: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
-          server_repository_name: securefix-server
-          pull_request_number: ${{ github.event.pull_request.number || github.event.issue.number }}
-          # Client validates before creating the server label. Defaults are only
-          # renovate/dependabot, so trusted human/bot committers must be listed
-          # here as well (must stay in sync with securefix-server approve.yml).
-          allowed_committers: |
-            civitaspo
-            cursoragent
-            civitaspo-securefix-server[bot]
-            renovate[bot]
-            dependabot[bot]
+    uses: civitaspo/securefix-server/.github/workflows/reusable-approve-request.yml@76147712338365a3f6c0a72a1f283b3241f86917 # v0.1.1
+    secrets:
+      SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
