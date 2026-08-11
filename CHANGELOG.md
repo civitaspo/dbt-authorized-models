@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.2.1] - 2026-08-11
+## [0.3.0] - 2026-08-11
 
 
 ### Bug Fixes
@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - point releasing guide at shared client-releases spec (#34)
 - compare with dbt model access
 - update agent guidance from retrospectives
+
+
+### Features
+
+- prefix package logs with (dbt-authorized-models) (#38)
 
 
 ### Maintenance
