@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update dependency jdx/mise to v2026.8.4 (#40)
 - grant nested reusable workflow permissions from callers (#39)
 - update actions/checkout action to v7 (#31)
 - collapse PR checks into status-check gate (#37)
