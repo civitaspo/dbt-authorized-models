@@ -1,6 +1,6 @@
 # dbt-authorized-models
 
-[![CI](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/ci.yml/badge.svg)](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/ci.yml)
+[![CI](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/pull_request.yml/badge.svg)](https://github.com/civitaspo/dbt-authorized-models/actions/workflows/pull_request.yml)
 
 `dbt-authorized-models` is a dbt package for enforcing explicit authorization rules on model, snapshot, and source references.
 
