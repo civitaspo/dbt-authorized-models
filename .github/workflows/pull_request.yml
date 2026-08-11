@@ -32,8 +32,9 @@ jobs:
       contents: read
       pull-requests: read
     with:
-      changed_title_only: ${{ github.event.action == 'edited' }}
-    secrets: inherit
+      changed_title_only: ${{ github.event.action == 'edited' && fromJSON('true') || fromJSON('false') }}
+    secrets:
+      SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
 
   status-check:
     runs-on: ubuntu-latest
