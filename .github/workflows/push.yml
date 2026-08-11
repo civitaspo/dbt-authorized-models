@@ -24,4 +24,3 @@ jobs:
     uses: ./.github/workflows/workflow_call_push.yml
     permissions:
       contents: read
-    secrets: inherit

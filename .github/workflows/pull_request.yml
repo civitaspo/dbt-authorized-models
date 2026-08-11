@@ -32,15 +32,17 @@ jobs:
       contents: read
       pull-requests: read
     with:
-      changed_title_only: ${{ github.event.action == 'edited' }}
-    secrets: inherit
+      changed_title_only: ${{ github.event.action == 'edited' && fromJSON('true') || fromJSON('false') }}
+    secrets:
+      SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
 
   status-check:
     runs-on: ubuntu-latest
-    if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
+    if: always()
     timeout-minutes: 10
     permissions: {}
     needs:
       - checks
     steps:
       - run: exit 1
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
