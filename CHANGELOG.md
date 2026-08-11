@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update actions/checkout action to v7 (#31)
 - collapse PR checks into status-check gate (#37)
 - lock file maintenance (#36)
 - update actions/setup-python action to v7 (#32)
