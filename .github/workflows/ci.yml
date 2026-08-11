@@ -1,6 +1,7 @@
-# Single pull_request entrypoint (Shunsuke pattern).
-# Required check: status-check (only). Real work lives in workflow_call_pr.yml.
-# Title edits (`edited`) run title-only; open/sync/reopen run the full suite.
+# Single CI entrypoint (Shunsuke pattern).
+# Required check: status-check (only). Real work lives in wc-* units.
+# Title edits (`edited`) run pr-title only; open/sync/reopen run the full suite.
+# Push/workflow_dispatch run tests without pr-title.
 
 name: CI
 
@@ -27,36 +28,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
-    if: github.event_name == 'pull_request' && github.event.action != 'edited'
-    uses: ./.github/workflows/workflow_call_pr.yml
-    with:
-      autofix: true
-      suite: full
-    secrets: inherit
+  integration-tests:
+    if: github.event_name != 'pull_request' || github.event.action != 'edited'
+    uses: ./.github/workflows/wc-integration-tests.yml
+    permissions:
+      contents: read
 
-  title-only:
-    if: github.event_name == 'pull_request' && github.event.action == 'edited'
-    uses: ./.github/workflows/workflow_call_pr.yml
-    with:
-      autofix: true
-      suite: title
-    secrets: inherit
+  fusion-compatibility:
+    if: github.event_name != 'pull_request' || github.event.action != 'edited'
+    uses: ./.github/workflows/wc-fusion-compatibility.yml
+    permissions:
+      contents: read
 
-  checks-push:
-    if: github.event_name != 'pull_request'
-    uses: ./.github/workflows/workflow_call_pr.yml
+  lint:
+    if: github.event_name != 'pull_request' || github.event.action != 'edited'
+    uses: ./.github/workflows/wc-lint.yml
     with:
-      autofix: false
-      suite: full
+      autofix: ${{ github.event_name == 'pull_request' }}
     secrets: inherit
+    permissions:
+      contents: read
+
+  pr-title:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/wc-pr-title.yml
+    permissions:
+      pull-requests: read
 
   status-check:
     name: status-check
     if: always() && !cancelled() && github.event_name == 'pull_request'
     needs:
-      - checks
-      - title-only
+      - integration-tests
+      - fusion-compatibility
+      - lint
+      - pr-title
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 5
@@ -72,5 +78,7 @@ jobs:
               exit 1
             fi
           }
-          ok "${{ needs.checks.result }}" "checks"
-          ok "${{ needs.title-only.result }}" "title-only"
+          ok "${{ needs.integration-tests.result }}" "integration-tests"
+          ok "${{ needs.fusion-compatibility.result }}" "fusion-compatibility"
+          ok "${{ needs.lint.result }}" "lint"
+          ok "${{ needs.pr-title.result }}" "pr-title"
