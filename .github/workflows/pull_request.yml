@@ -1,5 +1,5 @@
 # Outermost PR entry: bind the pull_request event only.
-# Which wc-* units run is decided in workflow_call_pr.yml.
+# Event facts (e.g. title-only edit) are computed here and passed into workflow_call_pr.
 
 name: CI
 
@@ -13,6 +13,10 @@ on:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
 # Separate title edits from full CI so editing a title does not cancel in-flight test/lint.
 concurrency:
   group: >-
@@ -24,22 +28,16 @@ concurrency:
 jobs:
   checks:
     uses: ./.github/workflows/workflow_call_pr.yml
+    with:
+      changed_title_only: ${{ github.event.action == 'edited' }}
     secrets: inherit
 
   status-check:
-    name: status-check
-    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+    if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
+    timeout-minutes: 10
+    permissions: {}
     needs:
       - checks
-    runs-on: ubuntu-latest
-    permissions: {}
-    timeout-minutes: 5
     steps:
-      - name: Require checks success
-        run: |
-          set -euo pipefail
-          result="${{ needs.checks.result }}"
-          echo "checks result: ${result}"
-          if [[ "${result}" != "success" ]]; then
-            exit 1
-          fi
+      - run: exit 1

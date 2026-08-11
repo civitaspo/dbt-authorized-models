@@ -7,6 +7,10 @@ on:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
 jobs:
   integration-tests:
     uses: ./.github/workflows/wc-integration-tests.yml
@@ -20,8 +24,5 @@ jobs:
 
   lint:
     uses: ./.github/workflows/wc-lint.yml
-    with:
-      autofix: false
-    secrets: inherit
     permissions:
       contents: read

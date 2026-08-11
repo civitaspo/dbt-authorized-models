@@ -1,31 +1,38 @@
 # PR aggregator: fans out to wc-* units.
-# Reads caller PR event (github.event.action); no menu inputs from the outer workflow.
+# Assumes caller is a pull_request workflow. Title-only is an input from the outer layer.
 
 name: PR checks (workflow_call)
 
 on:
   workflow_call:
+    inputs:
+      changed_title_only:
+        description: "True when the PR event only changed the title (action=edited)."
+        type: boolean
+        required: true
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
 jobs:
   integration-tests:
-    if: ${{ github.event.action != 'edited' }}
+    if: ${{ !inputs.changed_title_only }}
     uses: ./.github/workflows/wc-integration-tests.yml
     permissions:
       contents: read
 
   fusion-compatibility:
-    if: ${{ github.event.action != 'edited' }}
+    if: ${{ !inputs.changed_title_only }}
     uses: ./.github/workflows/wc-fusion-compatibility.yml
     permissions:
       contents: read
 
-  lint:
-    if: ${{ github.event.action != 'edited' }}
-    uses: ./.github/workflows/wc-lint.yml
-    with:
-      autofix: true
+  autofix:
+    if: ${{ !inputs.changed_title_only }}
+    uses: ./.github/workflows/wc-autofix.yml
     secrets: inherit
     permissions:
       contents: read
