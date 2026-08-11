@@ -28,6 +28,9 @@ concurrency:
 jobs:
   checks:
     uses: ./.github/workflows/workflow_call_pr.yml
+    permissions:
+      contents: read
+      pull-requests: read
     with:
       changed_title_only: ${{ github.event.action == 'edited' }}
     secrets: inherit
