@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.2.1] - 2026-08-09
+## [0.2.1] - 2026-08-11
 
 
 ### Bug Fixes
@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- collapse PR checks into status-check gate (#37)
 - lock file maintenance (#36)
 - update actions/setup-python action to v7 (#32)
 - migrate Renovate config (#33)
