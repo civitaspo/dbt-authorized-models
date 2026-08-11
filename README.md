@@ -164,7 +164,7 @@ The `check_authorization()` macro runs from your root project's `on-run-start` h
 When all references are authorized, the hook logs a short success message:
 
 ```text
-Authorization check passed (2 references checked)
+(dbt-authorized-models) Authorization check passed (2 references checked)
 ```
 
 ### Violations With Enforcement Enabled
@@ -174,19 +174,19 @@ With `enforce: true`, unauthorized references raise a compiler error and stop th
 Example log:
 
 ```text
-================================================================================
-Authorization check failed
-================================================================================
+(dbt-authorized-models) ================================================================================
+(dbt-authorized-models) Authorization check failed
+(dbt-authorized-models) ================================================================================
 
-Found 1 authorization violation(s):
+(dbt-authorized-models) Found 1 authorization violation(s):
 
-Violation 1:
-  Referencing: finance_report (model.my_project.finance_report)
-  Referenced:  sensitive_customer_data (model.my_project.sensitive_customer_data)
-  Authorization rules:
-    - {'resource_type': 'model', 'database': 'analytics', 'schema': 'compliance'}
+(dbt-authorized-models) Violation 1:
+(dbt-authorized-models)   Referencing: finance_report (model.my_project.finance_report)
+(dbt-authorized-models)   Referenced:  sensitive_customer_data (model.my_project.sensitive_customer_data)
+(dbt-authorized-models)   Authorization rules:
+(dbt-authorized-models)     - {'resource_type': 'model', 'database': 'analytics', 'schema': 'compliance'}
 
-================================================================================
+(dbt-authorized-models) ================================================================================
 Compilation Error
   Authorization check failed with 1 violation(s). Set dbt_authorized_models.enforce to false to warn only.
 ```
@@ -198,7 +198,7 @@ To fix this, either update the protected model's `meta.authorize` rules to allow
 With `enforce: false`, the same violations are logged, but dbt continues:
 
 ```text
-Continuing because dbt_authorized_models.enforce is false
+(dbt-authorized-models) Continuing because dbt_authorized_models.enforce is false
 ```
 
 Use this mode when introducing the package to an existing project or when you want an audit-only check.
@@ -208,7 +208,7 @@ Use this mode when introducing the package to an existing project or when you wa
 If a referenced model, snapshot, or source has no `meta.authorize`, it denies all references:
 
 ```text
-Authorization: deny all because meta.authorize is not defined
+(dbt-authorized-models)   Authorization: deny all because meta.authorize is not defined
 ```
 
 If that model should be public, add:

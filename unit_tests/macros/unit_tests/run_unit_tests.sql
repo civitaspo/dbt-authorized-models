@@ -6,7 +6,7 @@
   {% do test_evaluate_authorization() %}
   {% do test_validate_rule_hierarchy() %}
 
-  {{ log("All dbt-authorized-models unit tests passed.", info=true) }}
+  {{ log("(dbt-authorized-models) All dbt-authorized-models unit tests passed.", info=true) }}
 {% endmacro %}
 
 {% macro test_all_macros() %}

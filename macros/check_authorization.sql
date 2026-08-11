@@ -1,4 +1,18 @@
 {#
+  Log a package-scoped info message.
+
+  Prefix with parentheses so the identifier does not look like a dbt log level
+  token such as [info] or [MainThread]. Blank lines stay blank for readability.
+#}
+{% macro package_log(message) %}
+  {% if message == "" %}
+    {{ log("", info=true) }}
+  {% else %}
+    {{ log("(dbt-authorized-models) " ~ message, info=true) }}
+  {% endif %}
+{% endmacro %}
+
+{#
   Entry point for authorization checks.
 
   Add this macro to the root project's on-run-start hooks:
@@ -72,41 +86,41 @@
   {% endfor %}
 
   {% if ns.violations | length > 0 %}
-    {{ log("", info=true) }}
-    {{ log("=" * 80, info=true) }}
-    {{ log("Authorization check failed", info=true) }}
-    {{ log("=" * 80, info=true) }}
-    {{ log("", info=true) }}
-    {{ log("Found " ~ ns.violations | length ~ " authorization violation(s):", info=true) }}
-    {{ log("", info=true) }}
+    {{ dbt_authorized_models.package_log("") }}
+    {{ dbt_authorized_models.package_log("=" * 80) }}
+    {{ dbt_authorized_models.package_log("Authorization check failed") }}
+    {{ dbt_authorized_models.package_log("=" * 80) }}
+    {{ dbt_authorized_models.package_log("") }}
+    {{ dbt_authorized_models.package_log("Found " ~ ns.violations | length ~ " authorization violation(s):") }}
+    {{ dbt_authorized_models.package_log("") }}
 
     {% for violation in ns.violations %}
-      {{ log("Violation " ~ loop.index ~ ":", info=true) }}
-      {{ log("  Referencing: " ~ violation.referencing_name ~ " (" ~ violation.referencing_id ~ ")", info=true) }}
-      {{ log("  Referenced:  " ~ violation.referenced_name ~ " (" ~ violation.referenced_id ~ ")", info=true) }}
+      {{ dbt_authorized_models.package_log("Violation " ~ loop.index ~ ":") }}
+      {{ dbt_authorized_models.package_log("  Referencing: " ~ violation.referencing_name ~ " (" ~ violation.referencing_id ~ ")") }}
+      {{ dbt_authorized_models.package_log("  Referenced:  " ~ violation.referenced_name ~ " (" ~ violation.referenced_id ~ ")") }}
 
       {% if violation.auth_rules is none %}
-        {{ log("  Authorization: deny all because meta.authorize is not defined", info=true) }}
+        {{ dbt_authorized_models.package_log("  Authorization: deny all because meta.authorize is not defined") }}
       {% elif violation.auth_rules | length == 0 %}
-        {{ log("  Authorization: deny all because meta.authorize is empty", info=true) }}
+        {{ dbt_authorized_models.package_log("  Authorization: deny all because meta.authorize is empty") }}
       {% else %}
-        {{ log("  Authorization rules:", info=true) }}
+        {{ dbt_authorized_models.package_log("  Authorization rules:") }}
         {% for rule in violation.auth_rules %}
-          {{ log("    - " ~ rule, info=true) }}
+          {{ dbt_authorized_models.package_log("    - " ~ rule) }}
         {% endfor %}
       {% endif %}
-      {{ log("", info=true) }}
+      {{ dbt_authorized_models.package_log("") }}
     {% endfor %}
 
-    {{ log("=" * 80, info=true) }}
+    {{ dbt_authorized_models.package_log("=" * 80) }}
 
     {% if enforce %}
       {{ exceptions.raise_compiler_error("Authorization check failed with " ~ ns.violations | length ~ " violation(s). Set dbt_authorized_models.enforce to false to warn only.") }}
     {% else %}
-      {{ log("Continuing because dbt_authorized_models.enforce is false", info=true) }}
+      {{ dbt_authorized_models.package_log("Continuing because dbt_authorized_models.enforce is false") }}
     {% endif %}
   {% else %}
-    {{ log("Authorization check passed (" ~ ns.total_checks ~ " references checked)", info=true) }}
+    {{ dbt_authorized_models.package_log("Authorization check passed (" ~ ns.total_checks ~ " references checked)") }}
   {% endif %}
 
   {% do return('') %}
