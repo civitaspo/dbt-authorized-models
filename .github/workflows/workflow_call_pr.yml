@@ -1,46 +1,36 @@
-# Aggregates fine-grained wc-* workflow_call units.
-# Inputs are event facts from ci.yml — not "which suite to run".
+# PR aggregator: fans out to wc-* units.
+# Reads caller PR event (github.event.action); no menu inputs from the outer workflow.
 
 name: PR checks (workflow_call)
 
 on:
   workflow_call:
-    inputs:
-      autofix:
-        description: "True when the caller is a pull_request (enable SecureFix / PR-only jobs)."
-        type: boolean
-        required: true
-      changed_title_only:
-        description: "True when the pull_request event action is edited (title change)."
-        type: boolean
-        required: true
 
 permissions: {}
 
 jobs:
   integration-tests:
-    if: ${{ !inputs.changed_title_only }}
+    if: ${{ github.event.action != 'edited' }}
     uses: ./.github/workflows/wc-integration-tests.yml
     permissions:
       contents: read
 
   fusion-compatibility:
-    if: ${{ !inputs.changed_title_only }}
+    if: ${{ github.event.action != 'edited' }}
     uses: ./.github/workflows/wc-fusion-compatibility.yml
     permissions:
       contents: read
 
   lint:
-    if: ${{ !inputs.changed_title_only }}
+    if: ${{ github.event.action != 'edited' }}
     uses: ./.github/workflows/wc-lint.yml
     with:
-      autofix: ${{ inputs.autofix }}
+      autofix: true
     secrets: inherit
     permissions:
       contents: read
 
   pr-title:
-    if: ${{ inputs.autofix }}
     uses: ./.github/workflows/wc-pr-title.yml
     permissions:
       pull-requests: read

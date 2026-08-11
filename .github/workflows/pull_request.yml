@@ -1,5 +1,5 @@
-# Outermost entry: event identification only.
-# Which checks to run is decided inside workflow_call_pr.yml.
+# Outermost PR entry: bind the pull_request event only.
+# Which wc-* units run is decided in workflow_call_pr.yml.
 
 name: CI
 
@@ -10,32 +10,25 @@ on:
       - edited
       - synchronize
       - reopened
-  push:
-    branches:
-      - main
-  workflow_dispatch:
 
 permissions: {}
 
+# Separate title edits from full CI so editing a title does not cancel in-flight test/lint.
 concurrency:
   group: >-
-    ci-${{ github.workflow }}-${{ github.ref }}-${{
-      github.event_name == 'pull_request' && github.event.action == 'edited' && 'title'
-      || 'full'
+    ${{ github.workflow }}-${{ github.ref }}-${{
+      github.event.action == 'edited' && 'title' || 'full'
     }}
   cancel-in-progress: true
 
 jobs:
   checks:
     uses: ./.github/workflows/workflow_call_pr.yml
-    with:
-      autofix: ${{ github.event_name == 'pull_request' }}
-      changed_title_only: ${{ github.event_name == 'pull_request' && github.event.action == 'edited' }}
     secrets: inherit
 
   status-check:
     name: status-check
-    if: always() && !cancelled() && github.event_name == 'pull_request'
+    if: always() && !cancelled()
     needs:
       - checks
     runs-on: ubuntu-latest
