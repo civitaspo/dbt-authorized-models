@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.3.1] - 2026-08-11
+## [0.3.1] - 2026-08-12
 
 
 ### Documentation
 
 - fix broken CI badge after workflow rename (#42)
+
+
+### Maintenance
+
+- update dependency jdx/mise to v2026.8.5 (#44)
 
 ## [0.3.0] - 2026-08-11
 
