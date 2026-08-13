@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.3.1] - 2026-08-12
+## [0.3.1] - 2026-08-13
 
 
 ### Documentation
@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update csm-actions/securefix-action action to v0.6.1 (#45)
 - update dependency jdx/mise to v2026.8.5 (#44)
 
 ## [0.3.0] - 2026-08-11
