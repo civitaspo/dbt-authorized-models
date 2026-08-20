@@ -1,6 +1,6 @@
 [project]
 name = "dbt-authorized-models-tests"
-version = "0.3.0"
+version = "0.3.1"
 description = "Test tooling for dbt-authorized-models"
 requires-python = ">=3.10"
 dependencies = [
