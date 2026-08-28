@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.3.1] - 2026-08-28
+
+
+### Documentation
+
+- fix broken CI badge after workflow rename (#42)
+
+
+### Maintenance
+
+- update dependency aqua:astral-sh/uv to v0.12.7 (#61)
+- update dependency jdx/mise to v2026.8.14 (#60)
+- update dependency jdx/mise to v2026.8.13 (#59)
+- update dependency aqua:astral-sh/uv to v0.12.6 (#58)
+- update jdx/mise-action action to v4.3.0 (#57)
+- update dependency jdx/mise to v2026.8.12 (#56)
+- update dependency jdx/mise to v2026.8.11 (#55)
+- lock file maintenance (#54)
+- update dependency jdx/mise to v2026.8.10 (#53)
+- update dependency jdx/mise to v2026.8.9 (#52)
+- update dependency jdx/mise to v2026.8.8 (#51)
+- lock file maintenance (#50)
+- update dependency jdx/mise to v2026.8.6 (#49)
+- update dependency aqua:astral-sh/uv to v0.12.5 (#48)
+- update dependency aqua:astral-sh/uv to v0.12.4 (#47)
+- update jdx/mise-action action to v4.2.5 (#46)
+- update csm-actions/securefix-action action to v0.6.1 (#45)
+- update dependency jdx/mise to v2026.8.5 (#44)
+
 ## [0.3.0] - 2026-08-11
 
 
