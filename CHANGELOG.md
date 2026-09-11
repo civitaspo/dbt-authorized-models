@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update csm-actions/securefix-action action to v0.6.2 (#80)
 - update dependency jdx/mise to v2026.9.5 (#79)
 - update dependency aqua:astral-sh/uv to v0.12.13 (#78)
 - update dependency aqua:astral-sh/uv to v0.12.12 (#76)
