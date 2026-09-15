@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.3.2] - 2026-09-15
+
+
+### Maintenance
+
+- update dependency jdx/mise to v2026.9.9 (#89)
+- update dependency aqua:astral-sh/uv to v0.12.15 (#88)
+- update dependency aqua:astral-sh/uv to v0.12.14 (#87)
+- update dependency jdx/mise to v2026.9.8 (#86)
+- update dependency jdx/mise to v2026.9.7 (#85)
+- lock file maintenance (#84)
+- update dependency jdx/mise to v2026.9.6 (#83)
+- update csm-actions/securefix-action action to v0.6.3 (#81)
+- update csm-actions/securefix-action action to v0.6.2 (#80)
+- update dependency jdx/mise to v2026.9.5 (#79)
+- update dependency aqua:astral-sh/uv to v0.12.13 (#78)
+- update dependency aqua:astral-sh/uv to v0.12.12 (#76)
+- update dependency jdx/mise to v2026.9.4 (#77)
+- update dependency aqua:astral-sh/uv to v0.12.11 (#75)
+- update dependency jdx/mise to v2026.9.3 (#74)
+- update dependency jdx/mise to v2026.9.2 (#73)
+- lock file maintenance (#72)
+- update dependency aqua:astral-sh/uv to v0.12.10 (#71)
+- update dependency jdx/mise to v2026.9.1 (#70)
+- update dependency aqua:astral-sh/uv to v0.12.9 (#69)
+- update dependency aqua:orhun/git-cliff to v2.14.1 (#68)
+- update dependency jdx/mise to v2026.9.0 (#67)
+- update dependency aqua:astral-sh/uv to v0.12.8 (#66)
+- update dependency jdx/mise to v2026.8.16 (#65)
+- update dependency jdx/mise to v2026.8.15 (#64)
+- lock file maintenance (#62)
+
 ## [0.3.1] - 2026-08-28
 
 
