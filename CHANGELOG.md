@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update dependency jdx/mise to v2026.9.14 (#101)
 - update dependency aqua:astral-sh/uv to v0.12.19 (#100)
 - update civitaspo/securefix-server action to v0.1.2 (#99)
 - update dependency jdx/mise to v2026.9.13 (#98)
