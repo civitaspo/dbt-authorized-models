@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update dependency jdx/mise to v2026.9.16 (#105)
 - update dependency aqua:astral-sh/uv to v0.12.20 (#106)
 - lock file maintenance (#104)
 - lock file maintenance (#103)
