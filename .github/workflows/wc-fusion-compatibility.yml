@@ -34,10 +34,12 @@ jobs:
           cache: false
 
       - name: Install dbt Fusion
+        env:
+          DBT_FUSION_VERSION: "2.0.6"
         run: |
           mkdir -p "$RUNNER_TEMP/dbt-fusion-bin"
           curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
-            | sh -s -- --to "$RUNNER_TEMP/dbt-fusion-bin" --update
+            | sh -s -- --to "$RUNNER_TEMP/dbt-fusion-bin" --version "$DBT_FUSION_VERSION" --update
           "$RUNNER_TEMP/dbt-fusion-bin/dbt" --version
 
       - name: Install unit test packages
