@@ -18,7 +18,7 @@ It lets resource owners declare which dbt resources may reference a model, snaps
 ## Requirements
 
 - dbt Core 1.10 or later.
-- dbt Fusion 2.0 preview is parse-compatible and covered by CI.
+- dbt Fusion 2.0.6 is parse-compatible and covered by CI.
 
 ## Installation
 
