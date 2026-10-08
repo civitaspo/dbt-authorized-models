@@ -1,0 +1,27 @@
+name: Merge Request
+
+on:
+  issue_comment:
+    types:
+      - created
+
+permissions: {}
+
+concurrency:
+  group: merge-request-${{ github.event.comment.id }}
+  cancel-in-progress: false
+
+jobs:
+  request:
+    if: >-
+      github.event.issue.pull_request &&
+      github.event.comment.body == '/merge' &&
+      github.event.comment.user.id == 4525500 &&
+      github.run_attempt == 1
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@0944357ae26c4acf01df9bc37db4be0330566ac2 # v0.2.0-rc.2
+    secrets:
+      SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}

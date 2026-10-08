@@ -44,3 +44,7 @@ git-cliff regenerates the full changelog from git history. **Do not edit `CHANGE
 ## Credentials
 
 Repository secret `SECUREFIX_CLIENT_PRIVATE_KEY` only. See [securefix.md](securefix.md) and the [canonical client-releases doc](https://github.com/civitaspo/securefix-server/blob/main/docs/client-releases.md).
+
+## Merge requests
+
+A human requests the release merge by posting `/merge` on the pull request. Securefix performs the squash merge after the required checks and review pass. Only `civitaspo` may request it; release pull requests are not automerged. See the shared [merge policy](https://github.com/civitaspo/securefix-server/blob/main/docs/merging.md).

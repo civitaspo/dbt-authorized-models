@@ -4,6 +4,9 @@
     'config:best-practices',
     ':semanticCommits',
   ],
+  platformAutomerge: false,
+  automergeType: 'pr',
+  automergeStrategy: 'squash',
   dependencyDashboard: false,
   labels: [
     'dependencies',
