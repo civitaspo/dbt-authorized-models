@@ -22,6 +22,6 @@ jobs:
       contents: read
       issues: read
       pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@0944357ae26c4acf01df9bc37db4be0330566ac2 # Verified merge intake runtime fixes
+    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@0944357ae26c4acf01df9bc37db4be0330566ac2 # v0.2.0-rc.2
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
