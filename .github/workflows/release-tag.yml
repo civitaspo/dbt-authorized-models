@@ -6,23 +6,27 @@ on:
       - closed
   workflow_dispatch:
     inputs:
-      merge_sha:
-        description: Commit SHA to tag (defaults to main HEAD when empty)
-        required: false
-        type: string
+      release_pr_number:
+        description: Merged release/next PR to retry
+        required: true
+        type: number
 
 permissions: {}
 
 concurrency:
-  group: release-tag-${{ github.event.pull_request.number || github.run_id }}
+  group: release-tag-${{ github.event.pull_request.number || inputs.release_pr_number || github.run_id }}
   cancel-in-progress: false
 
 jobs:
   tag:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged && github.event.pull_request.head.ref == 'release/next' && github.event.pull_request.head.repo.full_name == github.repository)
     permissions:
       contents: write
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@32b3c519409da9ea39b3e674d7a69450af231766 # v0.1.2
+      attestations: read
+      pull-requests: read
+      issues: write
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@20f28eeb972c8961e799fb51c8b278ac1884ba8e
     with:
-      merge_sha: ${{ inputs.merge_sha }}
+      release_pr_number: ${{ inputs.release_pr_number }}
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}

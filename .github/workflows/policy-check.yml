@@ -1,4 +1,4 @@
-name: Approve Request
+name: Policy Check
 
 on:
   pull_request_target:
@@ -7,23 +7,23 @@ on:
       - synchronize
       - reopened
       - ready_for_review
-  issue_comment:
-    types:
-      - created
+  push:
+    branches:
+      - "main"
 
 permissions: {}
 
 concurrency:
-  group: approve-request-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  group: policy-check-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 jobs:
-  approve:
+  check:
     permissions:
+      actions: read
       contents: read
       attestations: read
-      issues: read
       pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-approve-request.yml@20f28eeb972c8961e799fb51c8b278ac1884ba8e
+    uses: civitaspo/securefix-server/.github/workflows/reusable-policy-check.yml@20f28eeb972c8961e799fb51c8b278ac1884ba8e
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
