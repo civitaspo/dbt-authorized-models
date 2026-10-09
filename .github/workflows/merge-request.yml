@@ -15,13 +15,14 @@ jobs:
   request:
     if: >-
       github.event.issue.pull_request &&
-      github.event.comment.body == '/merge' &&
+      contains(github.event.comment.body, '/merge') &&
       github.event.comment.user.id == 4525500 &&
       github.run_attempt == 1
     permissions:
       contents: read
+      attestations: read
       issues: read
       pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@0944357ae26c4acf01df9bc37db4be0330566ac2 # v0.2.0-rc.2
+    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@eb9845ad9a5897bef79a9a447eb2b6a2c1b678c1 # v0.1.0+eb9845ad9a5897bef79a9a447eb2b6a2c1b678c1
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
