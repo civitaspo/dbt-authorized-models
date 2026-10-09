@@ -24,6 +24,6 @@ jobs:
       attestations: read
       issues: read
       pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-approve-request.yml@20f28eeb972c8961e799fb51c8b278ac1884ba8e
+    uses: civitaspo/securefix-server/.github/workflows/reusable-approve-request.yml@20f28eeb972c8961e799fb51c8b278ac1884ba8e # v0.1.0+20f28eeb972c8961e799fb51c8b278ac1884ba8e
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
