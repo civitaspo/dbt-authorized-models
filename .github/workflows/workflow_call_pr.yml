@@ -40,6 +40,7 @@ jobs:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
     permissions:
       contents: read
+      attestations: read
 
   pr-title:
     uses: ./.github/workflows/wc-pr-title.yml
