@@ -1,9 +1,5 @@
 name: Release PR Sync
 
-# securefix-action creates a release/next PR once, but does not update the
-# title/body when later Release PR runs push new prepare commits. Sync metadata
-# from .release-version after each push to release/next.
-
 on:
   push:
     branches:
@@ -20,5 +16,6 @@ jobs:
   sync:
     permissions:
       contents: read
+      attestations: read
       pull-requests: write
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr-sync.yml@32b3c519409da9ea39b3e674d7a69450af231766 # v0.1.2
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr-sync.yml@828616ad902793c4fec28bcf794b1e9a71549fff # v0.1.0+828616ad902793c4fec28bcf794b1e9a71549fff

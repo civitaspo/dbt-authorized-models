@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      attestations: read
     timeout-minutes: 10
     env:
       SECUREFIX_CLIENT_APP_ID: ${{ vars.SECUREFIX_CLIENT_APP_ID }}
@@ -76,17 +77,41 @@ jobs:
           echo "changed=true" >> "$GITHUB_OUTPUT"
           git diff --name-only -- .github/workflows
 
-      - name: Request SecureFix commit
-        if: |
-          steps.workflow-fixes.outputs.changed == 'true' &&
-          env.SECUREFIX_CLIENT_APP_ID != ''
-        uses: csm-actions/securefix-action@1b770a7af0ec5e04517295b4e14c4b451359d550 # v0.6.3
+      - name: Capture Securefix files
+        id: securefix-files
+        if: steps.workflow-fixes.outputs.changed == 'true'
+        run: |
+          git ls-files --modified --deleted --others --exclude-standard --deduplicate -z > "$RUNNER_TEMP/securefix-files"
+          mapfile -d '' -t files < "$RUNNER_TEMP/securefix-files"
+          ((${#files[@]} > 0)) || { echo 'changed files are missing' >&2; exit 1; }
+          for file in "${files[@]}"; do
+          [[ "$file" != *$'\n'* && "$file" != *$'\r'* && "$file" != ' '* && "$file" != *' ' && "$file" != $'\t'* && "$file" != *$'\t' ]] || { echo 'changed file path cannot be represented' >&2; exit 1; }
+          done
+          delimiter=securefix-files
+          while printf '%s\n' "${files[@]}" | grep -Fqx -- "$delimiter"; do delimiter="${delimiter}x"; done
+          { printf 'files<<%s\n' "$delimiter"; printf '%s\n' "${files[@]}"; printf '%s\n' "$delimiter"; } >> "$GITHUB_OUTPUT"
+
+      - name: Create Securefix client token
+        id: securefix-client-token
+        if: "steps.workflow-fixes.outputs.changed == 'true' &&\nenv.SECUREFIX_CLIENT_APP_ID != ''\n"
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
-          action: client
-          app_id: ${{ env.SECUREFIX_CLIENT_APP_ID }}
-          app_private_key: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
-          commit_message: "ci: apply workflow security fixes"
-          server_repository: ${{ env.SECUREFIX_SERVER_REPOSITORY }}
+          app-id: "3872492"
+          private-key: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
+          owner: "civitaspo"
+          repositories: "securefix-server"
+          permission-issues: write
+
+      - name: "Request SecureFix commit"
+        if: "steps.workflow-fixes.outputs.changed == 'true' &&\nenv.SECUREFIX_CLIENT_APP_ID != ''\n"
+        uses: "civitaspo/securefix-server/.github/actions/client@828616ad902793c4fec28bcf794b1e9a71549fff" # v0.1.0+828616ad902793c4fec28bcf794b1e9a71549fff
+        with:
+          runtime-sha: 828616ad902793c4fec28bcf794b1e9a71549fff
+          server-repository: "civitaspo/securefix-server"
+          runtime-default-branch: "main"
+          client-token: ${{ steps.securefix-client-token.outputs.token }}
+          files: ${{ steps.securefix-files.outputs.files }}
+          commit-message: "ci: apply workflow security fixes"
 
       - name: Require SecureFix configuration
         if: |

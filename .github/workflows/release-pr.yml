@@ -3,8 +3,14 @@ name: Release PR
 on:
   push:
     branches:
-      - main
+      - "main"
   workflow_dispatch:
+    inputs:
+      version:
+        description: Explicit release version, or empty to compute it
+        required: false
+        type: string
+        default: ""
 
 permissions: {}
 
@@ -16,7 +22,10 @@ jobs:
   prepare:
     permissions:
       contents: read
+      attestations: read
       pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@32b3c519409da9ea39b3e674d7a69450af231766 # v0.1.2
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@828616ad902793c4fec28bcf794b1e9a71549fff # v0.1.0+828616ad902793c4fec28bcf794b1e9a71549fff
+    with:
+      version: ${{ inputs.version }}
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}

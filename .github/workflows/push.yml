@@ -24,3 +24,17 @@ jobs:
     uses: ./.github/workflows/workflow_call_push.yml
     permissions:
       contents: read
+
+  status-check:
+    name: status-check
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - checks
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Require successful checks
+        env:
+          JOB_RESULT: ${{ needs.checks.result }}
+        run: test "$JOB_RESULT" = success
