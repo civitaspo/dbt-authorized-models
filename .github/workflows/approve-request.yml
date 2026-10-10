@@ -14,7 +14,7 @@ on:
 permissions: {}
 
 concurrency:
-  group: approve-request-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  group: approve-request-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.comment.id || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       contents: read
       attestations: read
       issues: write
-      pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-approve-request.yml@8cbf331b0698327bce6ac2ec50e6b1548e84e346 # v0.2.1
+      pull-requests: write
+    uses: civitaspo/securefix-server/.github/workflows/reusable-approve-request.yml@9aede75d2fdfa244b802ab67c6221185d42f5500 # v0.2.2
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}

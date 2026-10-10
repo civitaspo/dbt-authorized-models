@@ -18,4 +18,4 @@ jobs:
       contents: read
       attestations: read
       pull-requests: write
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr-sync.yml@8cbf331b0698327bce6ac2ec50e6b1548e84e346 # v0.2.1
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr-sync.yml@9aede75d2fdfa244b802ab67c6221185d42f5500 # v0.2.2
