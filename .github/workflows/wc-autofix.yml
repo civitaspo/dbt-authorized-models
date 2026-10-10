@@ -104,9 +104,9 @@ jobs:
 
       - name: "Request SecureFix commit"
         if: "steps.workflow-fixes.outputs.changed == 'true' &&\nenv.SECUREFIX_CLIENT_APP_ID != ''\n"
-        uses: "civitaspo/securefix-server/.github/actions/client@27612ce6e65c4e934f821088aa57e7d8edf1b829" # v0.2.3
+        uses: "civitaspo/securefix-server/.github/actions/client@2ed83f28be56dd3329070a8f629c56b318db231e" # v0.2.4
         with:
-          runtime-sha: 27612ce6e65c4e934f821088aa57e7d8edf1b829
+          runtime-sha: 2ed83f28be56dd3329070a8f629c56b318db231e
           server-repository: "civitaspo/securefix-server"
           runtime-default-branch: "main"
           client-token: ${{ steps.securefix-client-token.outputs.token }}
