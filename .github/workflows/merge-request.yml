@@ -21,8 +21,8 @@ jobs:
     permissions:
       contents: read
       attestations: read
-      issues: read
-      pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@65fddf02de6f2669ea4938e05cb219506165396a # v0.2.0
+      issues: write
+      pull-requests: write
+    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@2ed83f28be56dd3329070a8f629c56b318db231e # v0.2.4
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
