@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update Securefix caller workflows to v0.2.12 (#142)
 - update Securefix caller workflows to v0.2.11 (#140)
 - update Securefix caller workflows to v0.2.10 (#139)
 - update dependency python to 3.15 (#136)
