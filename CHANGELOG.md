@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update dependency jdx/mise to v2026.10.9 (#144)
 - update actions/create-github-app-token action to v3.3.0 (#143)
 - update dependency jdx/mise to v2026.10.8 (#141)
 - update Securefix caller workflows to v0.2.12 (#142)
