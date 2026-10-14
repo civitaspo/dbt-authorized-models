@@ -25,7 +25,7 @@ jobs:
       attestations: read
       pull-requests: read
       issues: write
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@7b653de51fd50349cc723aa30b9b00a165be5569 # v0.2.12
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@1cbecad0aa082a99021790007255df39aedc5fb7 # v0.2.14
     with:
       release_pr_number: ${{ fromJSON(format('{0}', inputs.release_pr_number || github.event.pull_request.number || 0)) }}
     secrets:
