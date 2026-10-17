@@ -19,10 +19,11 @@ jobs:
       github.event.comment.user.id == 4525500 &&
       github.run_attempt == 1
     permissions:
+      actions: read
       contents: read
       attestations: read
       issues: write
       pull-requests: write
-    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@e8e2bc77d96a4e359417217f1d1c22f4e1ac4483 # v0.2.20
+    uses: civitaspo/securefix-server/.github/workflows/reusable-merge-request.yml@9865421823a451a8a7fe443e1896710971869fbc # v0.2.26
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}

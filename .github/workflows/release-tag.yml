@@ -21,11 +21,12 @@ jobs:
   tag:
     if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged && github.event.pull_request.head.ref == 'release/next' && github.event.pull_request.head.repo.full_name == github.repository)
     permissions:
+      actions: read
       contents: write
       attestations: read
       pull-requests: read
       issues: write
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@e8e2bc77d96a4e359417217f1d1c22f4e1ac4483 # v0.2.20
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-tag.yml@9865421823a451a8a7fe443e1896710971869fbc # v0.2.26
     with:
       release_pr_number: ${{ fromJSON(format('{0}', inputs.release_pr_number || github.event.pull_request.number || 0)) }}
     secrets:
