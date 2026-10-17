@@ -30,6 +30,7 @@ jobs:
     uses: ./.github/workflows/workflow_call_pr.yml
     permissions:
       contents: read
+      actions: read
       attestations: read
       pull-requests: read
     with:
