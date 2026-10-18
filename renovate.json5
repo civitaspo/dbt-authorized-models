@@ -5,7 +5,8 @@
     ':semanticCommits',
   ],
   platformAutomerge: false,
-  automergeType: 'pr',
+  automergeType: 'pr-comment',
+  automergeComment: '/merge',
   automergeStrategy: 'squash',
   dependencyDashboard: false,
   labels: [
