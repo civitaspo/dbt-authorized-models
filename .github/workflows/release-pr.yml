@@ -25,7 +25,7 @@ jobs:
       contents: read
       attestations: read
       pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@9865421823a451a8a7fe443e1896710971869fbc # v0.2.26
+    uses: civitaspo/securefix-server/.github/workflows/reusable-release-pr.yml@673dd9254150a3271b09798481f616900c56191a # v0.2.32
     with:
       version: ${{ inputs.version }}
     secrets:
