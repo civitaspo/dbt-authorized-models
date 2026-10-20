@@ -14,7 +14,7 @@ workflows:
     '.github/workflows/wc-autofix.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
-        - 'civitaspo/securefix-server@f80196051161fe4161c42cd9cb7530cc7db79882'
+        - 'civitaspo/securefix-server@1b35591e74eeae8fe848d16c6fcae0ba8fb75f6c'
         - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
     '.github/workflows/wc-fusion-compatibility.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
@@ -57,9 +57,9 @@ dependencies:
         commit: 'sha1-48f256284bd46cdaab1048c3721360e808335d50'
         owner_id: 4038316
         repo_id: 220418983
-    'civitaspo/securefix-server@f80196051161fe4161c42cd9cb7530cc7db79882':
-        ref: 'v0.2.36'
-        commit: 'sha1-f80196051161fe4161c42cd9cb7530cc7db79882'
+    'civitaspo/securefix-server@1b35591e74eeae8fe848d16c6fcae0ba8fb75f6c':
+        ref: 'v0.2.44'
+        commit: 'sha1-1b35591e74eeae8fe848d16c6fcae0ba8fb75f6c'
         owner_id: 4525500
         repo_id: 1250079425
         uses:
