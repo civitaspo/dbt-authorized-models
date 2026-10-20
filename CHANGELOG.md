@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.4.1] - 2026-10-18
+## [0.4.1] - 2026-10-20
 
 
 ### Bug Fixes
@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- update Securefix caller workflows to v0.2.36 (#161)
 - lock file maintenance (#160)
 - update Securefix caller workflows to v0.2.33 (#159)
 - update Securefix caller workflows to v0.2.32 (#158)
