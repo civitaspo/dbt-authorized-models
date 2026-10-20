@@ -24,6 +24,6 @@ jobs:
       contents: read
       attestations: read
       pull-requests: read
-    uses: civitaspo/securefix-server/.github/workflows/reusable-policy-check.yml@f80196051161fe4161c42cd9cb7530cc7db79882 # v0.2.36
+    uses: civitaspo/securefix-server/.github/workflows/reusable-policy-check.yml@1b35591e74eeae8fe848d16c6fcae0ba8fb75f6c # v0.2.44
     secrets:
       SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
