@@ -18,11 +18,11 @@ workflows:
         - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
     '.github/workflows/wc-fusion-compatibility.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
+        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
         - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
     '.github/workflows/wc-integration-tests.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
+        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
         - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
     '.github/workflows/wc-lint.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
@@ -42,9 +42,9 @@ dependencies:
         commit: 'sha1-64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
         owner_id: 44036562
         repo_id: 642580244
-    'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97':
-        ref: 'v7.0.0'
-        commit: 'sha1-5fda3b95a4ea91299a34e894583c3862153e4b97'
+    'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0':
+        ref: 'v7.1.0'
+        commit: 'sha1-6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
         owner_id: 44036562
         repo_id: 192625525
     'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02':
