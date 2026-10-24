@@ -15,18 +15,18 @@ workflows:
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
         - 'civitaspo/securefix-server@bf66565ea834e0fe528f4655806335740afd3348'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e'
     '.github/workflows/wc-fusion-compatibility.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e'
     '.github/workflows/wc-integration-tests.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e'
     '.github/workflows/wc-lint.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e'
     '.github/workflows/wc-pr-title.yml':
         - 'amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50'
     '.github/workflows/workflow_call_pr.yml': []
@@ -64,8 +64,8 @@ dependencies:
         repo_id: 1250079425
         uses:
             - 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02'
-    'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c':
-        ref: 'v4.3.0'
-        commit: 'sha1-c2a87611a18de5b3828c5652fe268e992400cb5c'
+    'jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e':
+        ref: 'v5.2.3'
+        commit: 'sha1-82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e'
         owner_id: 216188
         repo_id: 738284564
