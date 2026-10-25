@@ -21,6 +21,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          headerPattern: '^(\w+|release-pr)(?:\((.*)\))?!?: (.+)$'
+          headerPatternCorrespondence: type, scope, subject
           types: |
             feat
             fix
