@@ -1,0 +1,14 @@
+name: csm-ci-policy-check
+# Each event submits a separate request; callers do not cancel earlier requests.
+# These workflows never check out PR code.
+# jactionlint ignore=concurrency-limits,dangerous-triggers
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+permissions: {}
+jobs:
+  request:
+    # The called workflow mints the narrowly scoped Client App token.
+    # jactionlint ignore=secrets-inherit
+    uses: civitaspo/csm-ci-actions/.github/workflows/client-policy-check.yml@85d8fc79ef0ca89ec4cc073d142dab75ebe09a66
+    secrets: inherit

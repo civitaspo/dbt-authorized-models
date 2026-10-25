@@ -32,4 +32,5 @@ jobs:
             chore
             perf
             revert
+            ${{ github.head_ref == 'release/next' && github.event.pull_request.head.repo.full_name == github.repository && 'release-pr' || '' }}
           requireScope: false

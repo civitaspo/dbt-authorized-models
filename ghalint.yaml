@@ -1,0 +1,11 @@
+# Managed callers inherit the Client App key; the merge preflight requires this shape.
+excludes:
+  - policy_name: deny_inherit_secrets
+    workflow_file_path: .github/workflows/csm-ci-approve.yml
+    job_name: request
+  - policy_name: deny_inherit_secrets
+    workflow_file_path: .github/workflows/csm-ci-policy-check.yml
+    job_name: request
+  - policy_name: deny_inherit_secrets
+    workflow_file_path: .github/workflows/csm-ci-merge.yml
+    job_name: request

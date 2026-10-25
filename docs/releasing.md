@@ -1,37 +1,17 @@
 # Releasing
 
-This repository uses the shared Securefix client release flow hosted in [`civitaspo/securefix-server`](https://github.com/civitaspo/securefix-server).
+This package uses the [csm-ci release flow](https://github.com/civitaspo/csm-ci-actions/blob/main/docs/release-pr.md) hosted by [civitaspo/csm-ci-server](https://github.com/civitaspo/csm-ci-server).
 
-**Canonical specification:** [securefix-server docs/client-releases.md](https://github.com/civitaspo/securefix-server/blob/main/docs/client-releases.md)
+1. Squash-merge a change into `main` through `/merge`.
+2. **csm-ci-release-pr** runs git-cliff and opens or updates `release/next`. It updates `CHANGELOG.md`, `.release-version`, the root `dbt_project.yml` version, and the root `pyproject.toml` version together.
+3. Review the generated `release-pr: chore(release): vX.Y.Z` PR. The owner comments `/approve` for its sensitive version manifest, waits for `status-check` and `csm-ci/policy`, then comments `/merge`.
+4. **csm-ci-release** requests server-side publication. The server verifies the merged release PR, creates `vX.Y.Z`, and publishes an immutable GitHub Release with `SHA256SUMS` and provenance attestation. This is a source-only dbt package; there are no compiled binary assets.
 
-## Overview
+The preparation workflow skips release commits to avoid proposing the just-merged version before its tag exists. Use workflow dispatch with an optional explicit semantic version to prepare or retry a real release. The publish request runs only for a merged, same-repository `release/next` PR targeting the default branch.
 
-1. Commits land on `main` via squash-merged pull requests.
-2. **Release PR** (reusable on securefix-server) runs git-cliff, updates `.release-version` / `CHANGELOG.md`, and syncs `dbt_project.yml` / `pyproject.toml` when present, then opens or updates `release/next` via Securefix.
-3. **Release PR Sync** keeps the open `release/next` PR title/body aligned with `.release-version`.
-4. A human squash-merges `chore(release): vX.Y.Z`.
-5. **Release Tag** creates annotated tag `vX.Y.Z` and creates a `release-request-*` label on `civitaspo/securefix-server`.
-6. The server **Release** workflow validates the allowlist entry and publishes a GitHub Release.
+## Version bump rules
 
-Local workflows under `.github/workflows/` are thin wrappers that `uses:` the securefix-server reusables at a pinned commit SHA.
-
-## Repository release protections
-
-- **Tag protection** (`Protect tags` ruleset): active — blocks force-pushes and deletion of tags outside the allowed release path.
-- **Immutable releases**: enabled when the publisher creates a draft release, attaches notes, then publishes once.
-
-## Version bump rules (while major is 0)
-
-Configured in `cliff.toml` (`[bump]`) and applied by git-cliff:
-
-- Conventional Commit breaking change (`type!:` or `BREAKING CHANGE`) → minor
-- `feat:` → minor
-- everything else releasable → patch
-- Only `chore(release):` commits since the last tag → nothing to release
-
-The Release PR workflow floors the base version on both the latest `v*` tag and `.release-version` on `main`. If the floor tag is not present yet (release merged, Release Tag still running), it creates a **local** tag at the matching `chore(release):` commit so git-cliff does not re-propose the version that just shipped. That local tag is never pushed.
-
-## Local preview
+`cliff.toml` controls inferred versions. While major is zero, breaking changes and `feat:` commits bump the minor version; other releasable changes bump the patch version. Release commits alone do not produce another release.
 
 ```bash
 mise install --locked
@@ -39,12 +19,8 @@ mise exec -- git cliff --bumped-version
 mise exec -- git cliff --tag vX.Y.Z --output CHANGELOG.md
 ```
 
-git-cliff regenerates the full changelog from git history. **Do not edit `CHANGELOG.md` on feature PRs** — Lint fails if a non-`release/next` PR touches that file. Use Conventional Commit subjects; the Release PR is the only writer. Hand-edited `## Unreleased` notes cause merge conflicts with the long-lived `release/next` branch.
+The release PR owns `CHANGELOG.md`. Keep it out of feature PRs and use Conventional Commit subjects for release notes. Release version files must remain valid semantic versions; preparation rejects unsupported manifest formats before changing any file.
 
-## Credentials
+## Credentials and protection
 
-Repository secret `SECUREFIX_CLIENT_PRIVATE_KEY` only. See [securefix.md](securefix.md) and the [canonical client-releases doc](https://github.com/civitaspo/securefix-server/blob/main/docs/client-releases.md).
-
-## Merge requests
-
-A human requests the release merge by posting `/merge` on the pull request. Securefix performs the squash merge after the required checks and review pass. Only `civitaspo` may request it; release pull requests are not automerged. See the shared [merge policy](https://github.com/civitaspo/securefix-server/blob/main/docs/merging.md).
+Only the Client App key is held here; see [securefix.md](securefix.md). Server and Approver credentials stay in the server's `csm-ci` environment. The managed `release-tags` ruleset restricts `v*` tag creation to the Server App. The existing general tag integrity ruleset remains active. Published releases are immutable.

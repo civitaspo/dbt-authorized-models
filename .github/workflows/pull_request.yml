@@ -36,7 +36,7 @@ jobs:
     with:
       changed_title_only: ${{ github.event.action == 'edited' && fromJSON('true') || fromJSON('false') }}
     secrets:
-      SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
+      CSM_CI_CLIENT_APP_PRIVATE_KEY: ${{ secrets.CSM_CI_CLIENT_APP_PRIVATE_KEY }}
 
   status-check:
     runs-on: ubuntu-latest

@@ -11,7 +11,7 @@ on:
         type: boolean
         required: true
     secrets:
-      SECUREFIX_CLIENT_PRIVATE_KEY:
+      CSM_CI_CLIENT_APP_PRIVATE_KEY:
         required: false
 
 permissions: {}
@@ -37,7 +37,7 @@ jobs:
     if: ${{ !inputs.changed_title_only }}
     uses: ./.github/workflows/wc-autofix.yml
     secrets:
-      SECUREFIX_CLIENT_PRIVATE_KEY: ${{ secrets.SECUREFIX_CLIENT_PRIVATE_KEY }}
+      CSM_CI_CLIENT_APP_PRIVATE_KEY: ${{ secrets.CSM_CI_CLIENT_APP_PRIVATE_KEY }}
     permissions:
       contents: read
       actions: read
