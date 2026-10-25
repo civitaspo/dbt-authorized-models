@@ -1,0 +1,8 @@
+version: 3
+# These reviewed upstream commits are deliberately pinned before a tagged release.
+# ghalint still enforces immutable SHAs, and actions.lock records their dependencies.
+rules:
+  - ignore: true
+    conditions:
+      - expr: |
+          ActionRepoFullName == "civitaspo/csm-ci-actions" && ActionVersion in ["85d8fc79ef0ca89ec4cc073d142dab75ebe09a66", "e06b90a7e1b21b12549b5b2b11b584de410f1d6a"]

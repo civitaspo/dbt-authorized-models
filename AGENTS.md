@@ -19,7 +19,7 @@ This repository contains `dbt-authorized-models`, a dbt package that enforces ex
 - Use squash merge only for pull requests in this repository.
 - If local `main` has diverged, branch from `origin/main` and leave the local branch history untouched.
 - Keep pull request descriptions complete enough for an outside OSS maintainer to review, but do not include unnecessary personal information.
-- Do not store strong credentials in this repository. GPG keys, machine-user PATs, and `contents: write` app keys live only in `civitaspo/securefix-server`.
+- Do not store strong credentials in this repository. Server and Approver App keys live only in the `csm-ci` environment of `civitaspo/csm-ci-server`; this client holds only the Client App key.
 
 ## Package Behavior Notes
 
@@ -58,7 +58,7 @@ mise run test:fusion
 - Keep workflow permissions least-privilege and job names descriptive.
 - Run workflow linting with ghalint, pinact, and disable-checkout-persist-credentials.
 - Use Securefix for automated workflow security fixes when configured.
-- Approvals for trusted authors are requested through `csm-actions/approve-pr-action`.
+- Use the managed csm-ci callers for approval, policy checks, and merge requests. Read [docs/securefix.md](docs/securefix.md) before changing these flows.
 - Do not provide hidden defaults for required repository variables in workflows; fail clearly when required configuration is missing.
 
 See [docs/securefix.md](docs/securefix.md) and [docs/releasing.md](docs/releasing.md).
@@ -87,6 +87,6 @@ When changing compatibility-sensitive macro behavior, also verify with dbt Fusio
 
 ## Release
 
-Releases are prepared by the **Release PR** workflow (git-cliff + Securefix `release/next`). A human squash-merges `chore(release): vX.Y.Z`; **Release Tag** creates the annotated tag and asks `civitaspo/securefix-server` to publish the GitHub Release.
+The **csm-ci-release-pr** workflow prepares `release/next`, synchronizing `.release-version`, `dbt_project.yml`, and `pyproject.toml`. Its generated `release-pr: chore(release): vX.Y.Z` title is allowed only on that same-repository branch. After `/approve` and `/merge`, **csm-ci-release** requests a source-only immutable release from `civitaspo/csm-ci-server`.
 
 Do not edit `CHANGELOG.md` on feature PRs. See [docs/releasing.md](docs/releasing.md).
