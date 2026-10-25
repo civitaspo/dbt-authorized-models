@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 
+- inherit Client App credentials in the release publication caller
 - parse generated release PR titles
 - request merges through Securefix comments (#157)
 
