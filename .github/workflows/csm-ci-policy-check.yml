@@ -10,5 +10,5 @@ jobs:
   request:
     # The called workflow mints the narrowly scoped Client App token.
     # jactionlint ignore=secrets-inherit
-    uses: civitaspo/csm-ci-actions/.github/workflows/client-policy-check.yml@85d8fc79ef0ca89ec4cc073d142dab75ebe09a66
+    uses: civitaspo/csm-ci-actions/.github/workflows/client-policy-check.yml@2b751e0f2e16bb8e7bdd57994a8d3e13cdb1879e
     secrets: inherit
