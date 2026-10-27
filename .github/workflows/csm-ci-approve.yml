@@ -14,7 +14,7 @@ on:
 permissions: {}
 jobs:
   approve:
-    uses: civitaspo/csm-ci-actions/.github/workflows/client-approve.yml@a8645b8e9461dd9d3f0a03e09fe39e54d295cb0f # v0.3.0
+    uses: civitaspo/csm-ci-actions/.github/workflows/client-approve.yml@b8f681d70132292bf22930246d4b968dbfd02eba # v0.3.1
     permissions: {}
     secrets:
       CSM_CI_CLIENT_APP_PRIVATE_KEY: ${{ secrets.CSM_CI_CLIENT_APP_PRIVATE_KEY }}
