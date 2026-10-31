@@ -8,7 +8,7 @@ on:
 permissions: {}
 jobs:
   release:
-    uses: civitaspo/csm-ci-actions/.github/workflows/client-release-publish.yml@e151bdb8290e50cca5efbb3c8da628352ee6b0b0 # v0.5.0
+    uses: civitaspo/csm-ci-actions/.github/workflows/client-release-publish.yml@4eec63156502010e1d11aa0e5b7ff31a64788d3e # v0.6.0
     permissions: {}
     secrets:
       CSM_CI_CLIENT_APP_PRIVATE_KEY: ${{ secrets.CSM_CI_CLIENT_APP_PRIVATE_KEY }}
