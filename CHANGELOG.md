@@ -7,12 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.4.2] - 2026-10-31
+
+
+### Bug Fixes
+
+- accept trusted Renovate merge requests
+
+
+### Maintenance
+
+- update civitaspo/csm-ci-actions action to v0.6.0 (#186)
+- update civitaspo/csm-ci-actions action to v0.5.0 (#184)
+- sync managed files (#183)
+- update civitaspo/csm-ci-actions action to v0.3.1
+- sync managed files
+- sync managed files
+
 ## [0.4.1] - 2026-10-25
 
 
 ### Bug Fixes
 
-- inherit Client App credentials in the release publication caller
 - parse generated release PR titles
 - request merges through Securefix comments (#157)
 
@@ -63,6 +79,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update dependency jdx/mise to v2026.10.4 (#120)
 - update dependency jdx/mise to v2026.10.3 (#118)
 - update dependency jdx/mise to v2026.10.2 (#116)
+
+
+### Miscellaneous
+
+- chore(release): v0.4.1
+- chore(release): v0.4.1
 
 ## [0.4.0] - 2026-10-04
 
