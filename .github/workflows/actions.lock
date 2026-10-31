@@ -13,18 +13,18 @@ workflows:
     '.github/workflows/wc-autofix.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'civitaspo/csm-ci-actions@85d8fc79ef0ca89ec4cc073d142dab75ebe09a66'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195'
     '.github/workflows/wc-fusion-compatibility.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195'
     '.github/workflows/wc-integration-tests.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195'
     '.github/workflows/wc-lint.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c'
+        - 'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195'
     '.github/workflows/wc-pr-title.yml':
         - 'amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50'
     '.github/workflows/workflow_call_pr.yml': []
@@ -63,8 +63,8 @@ dependencies:
         uses:
             - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
             - 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9'
-    'jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c':
-        ref: 'v4.3.0'
-        commit: 'sha1-c2a87611a18de5b3828c5652fe268e992400cb5c'
+    'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195':
+        ref: 'v5.2.5'
+        commit: 'sha1-6612f0ef07ed2a736cd1e00a94a065522dd41195'
         owner_id: 216188
         repo_id: 738284564
