@@ -26,8 +26,6 @@ jobs:
       actions: read
       attestations: read
       pull-requests: read
-    with:
-      changed_title_only: false
     secrets:
       CSM_CI_CLIENT_APP_PRIVATE_KEY: ${{ secrets.CSM_CI_CLIENT_APP_PRIVATE_KEY }}
 
