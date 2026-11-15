@@ -1,13 +1,9 @@
-# Outermost PR entry: bind the pull_request event only.
-# Event facts (e.g. title-only edit) are computed here and passed into workflow_call_pr.
-
 name: CI
 
 on:
   pull_request:
     types:
       - opened
-      - edited
       - synchronize
       - reopened
 
@@ -17,12 +13,8 @@ defaults:
   run:
     shell: bash -euo pipefail {0}
 
-# Separate title edits from full CI so editing a title does not cancel in-flight test/lint.
 concurrency:
-  group: >-
-    ${{ github.workflow }}-${{ github.ref }}-${{
-      github.event.action == 'edited' && 'title' || 'full'
-    }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -34,16 +26,19 @@ jobs:
       attestations: read
       pull-requests: read
     with:
-      changed_title_only: ${{ github.event.action == 'edited' && fromJSON('true') || fromJSON('false') }}
+      changed_title_only: false
     secrets:
       CSM_CI_CLIENT_APP_PRIVATE_KEY: ${{ secrets.CSM_CI_CLIENT_APP_PRIVATE_KEY }}
 
   status-check:
     runs-on: ubuntu-latest
-    if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
+    if: always()
     timeout-minutes: 10
     permissions: {}
     needs:
       - checks
     steps:
-      - run: exit 1
+      - name: Require successful checks
+        env:
+          JOB_RESULT: ${{ needs.checks.result }}
+        run: test "$JOB_RESULT" = success

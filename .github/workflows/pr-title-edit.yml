@@ -1,0 +1,13 @@
+name: PR title edit
+on:
+  pull_request:
+    types: [edited]
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}-caller-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  title:
+    uses: ./.github/workflows/wc-pr-title.yml
+    permissions:
+      pull-requests: read
