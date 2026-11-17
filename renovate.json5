@@ -8,7 +8,9 @@
   automergeType: 'pr-comment',
   automergeComment: '/merge',
   automergeStrategy: 'squash',
-  dependencyDashboard: false,
+  dependencyDashboard: {
+    enabled: false,
+  },
   labels: [
     'dependencies',
   ],
