@@ -7,12 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.4.2] - 2026-11-21
+
+
+### Bug Fixes
+
+- publish required status after full checks (#193)
+- accept trusted Renovate merge requests
+
+
+### Maintenance
+
+- update amannn/action-semantic-pull-request action to v6.1.3 (#195)
+- sync managed files (#185)
+- update civitaspo/csm-ci-actions action to v0.9.0 (#192)
+- update civitaspo/csm-ci-actions action to v0.8.0 (#191)
+- update dependency opentelemetry-api to v1.45.2 [security] (#190)
+- update civitaspo/csm-ci-actions action to v0.7.0 (#188)
+- update amannn/action-semantic-pull-request action to v6.1.2 (#187)
+- update civitaspo/csm-ci-actions action to v0.6.0 (#186)
+- update civitaspo/csm-ci-actions action to v0.5.0 (#184)
+- sync managed files (#183)
+- update civitaspo/csm-ci-actions action to v0.3.1
+- sync managed files
+- sync managed files
+
 ## [0.4.1] - 2026-10-25
 
 
 ### Bug Fixes
 
-- inherit Client App credentials in the release publication caller
 - parse generated release PR titles
 - request merges through Securefix comments (#157)
 
@@ -63,6 +87,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update dependency jdx/mise to v2026.10.4 (#120)
 - update dependency jdx/mise to v2026.10.3 (#118)
 - update dependency jdx/mise to v2026.10.2 (#116)
+
+
+### Miscellaneous
+
+- chore(release): v0.4.1
+- chore(release): v0.4.1
 
 ## [0.4.0] - 2026-10-04
 
