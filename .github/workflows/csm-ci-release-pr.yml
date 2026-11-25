@@ -16,7 +16,7 @@ permissions: {}
 jobs:
   release-pr:
     if: "github.event_name == 'workflow_dispatch' || (!startsWith(github.event.head_commit.message, 'chore(release): v') && !startsWith(github.event.head_commit.message, 'release-pr: chore(release): v'))"
-    uses: civitaspo/csm-ci-actions/.github/workflows/client-release-prepare.yml@e0791d2e097fccb8e2fa58bb35ec305e336cc3c5 # v0.10.0
+    uses: civitaspo/csm-ci-actions/.github/workflows/client-release-prepare.yml@52b726db3c90155c9bd7adc9c8766fa342994b35 # v0.11.0
     permissions:
       contents: read
     with:
